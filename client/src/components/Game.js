@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../socket';
+import UserList from './UserList';
+import RoundHistory from './RoundHistory';
 
 function Game({ roomId, username }) {
     const [trees, setTrees] = useState(0);
@@ -51,7 +53,7 @@ function Game({ roomId, username }) {
 
         const endHandler = (msg) => {
             setGameEnded(true);
-            setMessage(msg);
+            //setMessage(msg);
         };
 
         socket.on('update', updateHandler);
@@ -103,57 +105,13 @@ function Game({ roomId, username }) {
                     <button className="btn btn-primary" onClick={placeOrder}>Bestellung aufgeben</button>
                 </div>
             ) : gameEnded ? (
-                <p>Spiel vorbei. Keine Bestellungen mehr möglich.</p>
+                <p>Keine Bestellungen mehr möglich.</p>
             ) : (
                 <p>Du hast {order} Bäume bestellt</p>
             )}
-            <p className="text-danger mt-3">{message}</p>
-            <h2 className="mt-4">Verbundene Benutzer:</h2>
-            <ul className="list-group">
-                {connectedUsers.map((user, index) => (
-                    <li key={index} className="list-group-item">
-                        {user.username} {orderStatus[user.username] ? '- Hat bestellt' : ''} ({user.role === 'player' ? 'Spieler' : 'Zuschauer'})
-                    </li>
-                ))}
-            </ul>
-            <h2 className="mt-4">Rundenhistorie:</h2>
-            <table className="table">
-                <thead>
-                <tr>
-                    <th>Runde</th>
-                    {connectedUsers.filter(user => user.role === 'player').map((user, index) => (
-                        <th key={index}>{user.username}</th>
-                    ))}
-                    <th>Summe bestellt</th>
-                    <th>Summe gerodet</th>
-                    <th>Übrige Bäume</th>
-                    <th>Neue Bäume</th>
-                    <th>Bäume im Wald</th>
-                    <th>Reihenfolge</th>
-                </tr>
-                </thead>
-                <tbody>
-                {roundHistory.map((round, index) => (
-                    <tr key={index}>
-                        <td>{round.round}</td>
-                        {connectedUsers.filter(user => user.role === 'player').map((user, userIndex) => {
-                            const order = round.orders.find(o => o.username === user.username);
-                            return (
-                                <td key={userIndex}>
-                                    {order ? `${order.ordered} (${order.received})` : '-'}
-                                </td>
-                            );
-                        })}
-                        <td>{round.totalOrdered}</td>
-                        <td>{round.totalFelled}</td>
-                        <td>{round.remainingTrees}</td>
-                        <td>{round.newGrowth}</td>
-                        <td>{round.remainingTrees + round.newGrowth}</td>
-                        <td>{round.orderSequence.join(', ')}</td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+            <p className="d-none text-danger mt-3">{message}</p>
+            <UserList users={connectedUsers} orderStatus={orderStatus} />
+            <RoundHistory roundHistory={roundHistory} connectedUsers={connectedUsers} />
         </div>
     );
 }

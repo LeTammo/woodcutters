@@ -185,7 +185,7 @@ function processOrders(roomId) {
 
     if (room.currentRound >= maxRounds) {
         room.gameEnded = true;
-        io.to(roomId).emit('end', 'Game Over');
+        io.to(roomId).emit('end');//, 'Das Spiel ist beendet.');
     }
 }
 
