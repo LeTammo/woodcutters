@@ -6,43 +6,28 @@ function RoundHistory({ roundHistory, connectedUsers }) {
     return (
         <div className="mt-4">
             <h2>Rundenhistorie:</h2>
-            <table className="table">
-                <thead>
-                <tr>
-                    <th>Runde</th>
-                    {playerUsers.map((user, index) => (
-                        <th key={index}>{user.username}</th>
-                    ))}
-                    <th>Summe bestellt</th>
-                    <th>Summe gerodet</th>
-                    <th>Übrige Bäume</th>
-                    <th>Neue Bäume</th>
-                    <th>Bäume im Wald</th>
-                    <th>Reihenfolge</th>
-                </tr>
-                </thead>
-                <tbody>
-                {roundHistory.map((round, index) => (
-                    <tr key={index}>
-                        <td>{round.round}</td>
-                        {playerUsers.map((user, userIndex) => {
-                            const order = round.orders.find(o => o.username === user.username);
-                            return (
-                                <td key={userIndex}>
-                                    {order ? `${order.ordered} (${order.received})` : '-'}
-                                </td>
-                            );
-                        })}
-                        <td>{round.totalOrdered}</td>
-                        <td>{round.totalFelled}</td>
-                        <td>{round.remainingTrees}</td>
-                        <td>{round.newGrowth}</td>
-                        <td>{round.remainingTrees + round.newGrowth}</td>
-                        <td>{round.orderSequence.join(', ')}</td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+            {playerUsers.map((user, index) => (
+                <div key={index} className="mb-2">{user.username}</div>
+            ))}
+            {roundHistory.map((round, roundIndex) => (
+                <div key={roundIndex} className="mb-4">
+                    <div className="fw-bold">Runde {round.round} beginnt</div>
+                    <div className="fst-italic">Ausgewürfelte Reihenfolge:</div>
+                    <div>{round.orderSequence.join(', ')}</div>
+                    <div className="mt-2 fst-italic">Bestellungen:</div>
+                    <div className="mb-2">
+                        {round.orders.map((order, orderIndex) => (
+                            <div key={orderIndex}>
+                                <span className="text-primary-emphasis">{order.username}: {order.received}</span>
+                                <span className="text-secondary">&nbsp;({order.ordered} bestellt)</span>
+                            </div>
+                        ))}
+                    </div>
+                    <div><span className="text-danger-emphasis">{round.totalFelled} Bäume</span> werden gerodet.</div>
+                    <div>Es bleiben {round.remainingTrees} Bäume übrig und es wachsen {round.newGrowth} nach.</div>
+                    <div>Der Wald hat nun <span className="text-success-emphasis">{round.remainingTrees + round.newGrowth} Bäume</span>.</div>
+                </div>
+            ))}
         </div>
     );
 }
