@@ -1,6 +1,6 @@
 import React from 'react';
 
-function RoundHistory({ roundHistory }) {
+function RoundHistory({ roundHistory, users, orderStatus }) {
     return (
         <div>
             {roundHistory.map((round, roundIndex) => (
@@ -21,6 +21,9 @@ function RoundHistory({ roundHistory }) {
                     <div>Es bleiben {round.remainingTrees} Bäume übrig und es wachsen {round.newGrowth} nach.</div>
                     <div>Der Wald hat nun <span className="text-success-emphasis">{round.remainingTrees + round.newGrowth} Bäume</span>.</div>
                 </div>
+            ))}
+            {users.map((user, index) => (
+                <div key={index}>${user.username} {orderStatus[user.username] ? `hat bestellt!` : 'dent nach...'}</div>
             ))}
         </div>
     );

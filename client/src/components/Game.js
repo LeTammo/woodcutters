@@ -89,7 +89,7 @@ function Game({ roomId, username }) {
 
     return (
         <div className="container mt-3">
-            <p className="h5">Runde: {round}</p>
+            <p className="h5">Aktuelle Runde: {round}</p>
             <p className="h5">Bäume im Wald: {trees}</p>
             {!gameStarted ? (
                 role === 'player' && <button className="btn btn-primary" onClick={handleReady} disabled={isReady}>Bereit</button>
@@ -111,7 +111,7 @@ function Game({ roomId, username }) {
             )}
             <p className="d-none text-danger mt-3">{message}</p>
             <UserList users={connectedUsers} orderStatus={orderStatus} />
-            <RoundHistory roundHistory={roundHistory} />
+            <RoundHistory roundHistory={roundHistory} users={connectedUsers} orderStatus={orderStatus} />
         </div>
     );
 }
