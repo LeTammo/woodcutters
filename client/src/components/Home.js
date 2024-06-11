@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { socket } from '../socket';
 
 function Home() {
@@ -32,15 +32,16 @@ function Home() {
     };
 
     return (
-        <div>
-            <button onClick={createRoom}>Neuen Raum erstellen</button>
+        <div className="container mt-5">
+            <button className="btn btn-success" onClick={createRoom}>Neuen Raum erstellen</button>
             <input
                 type="text"
                 value={roomId}
                 onChange={(e) => setRoomId(e.target.value)}
+                className="form-control my-3"
                 placeholder="Raum ID"
             />
-            <button onClick={joinRoom}>Raum Beitreten</button>
+            <button className="btn btn-primary" onClick={joinRoom}>Raum Beitreten</button>
         </div>
     );
 }

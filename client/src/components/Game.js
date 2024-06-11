@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from 'react';
 import { socket } from '../socket';
 
 function Game({ roomId, username }) {
@@ -86,37 +86,38 @@ function Game({ roomId, username }) {
     };
 
     return (
-        <div>
-            <p>Runde: {round}</p>
-            <p>Bäume im Wald: {trees}</p>
+        <div className="container mt-3">
+            <p className="h5">Runde: {round}</p>
+            <p className="h5">Bäume im Wald: {trees}</p>
             {!gameStarted ? (
-                role === 'player' && <button onClick={handleReady} disabled={isReady}>Bereit</button>
+                role === 'player' && <button className="btn btn-primary" onClick={handleReady} disabled={isReady}>Bereit</button>
             ) : !hasOrdered && !gameEnded && role === 'player' ? (
                 <div>
                     <input
                         type="number"
                         value={order}
                         onChange={(e) => setOrder(e.target.value)}
+                        className="form-control mb-2"
                         placeholder="Anzahl Bäume"
                     />
-                    <button onClick={placeOrder}>Bestellung aufgeben</button>
+                    <button className="btn btn-primary" onClick={placeOrder}>Bestellung aufgeben</button>
                 </div>
             ) : gameEnded ? (
                 <p>Spiel vorbei. Keine Bestellungen mehr möglich.</p>
             ) : (
                 <p>Du hast {order} Bäume bestellt</p>
             )}
-            <p>{message}</p>
-            <h2>Verbundene Benutzer:</h2>
-            <ul>
+            <p className="text-danger mt-3">{message}</p>
+            <h2 className="mt-4">Verbundene Benutzer:</h2>
+            <ul className="list-group">
                 {connectedUsers.map((user, index) => (
-                    <li key={index}>
+                    <li key={index} className="list-group-item">
                         {user.username} {orderStatus[user.username] ? '- Hat bestellt' : ''} ({user.role === 'player' ? 'Spieler' : 'Zuschauer'})
                     </li>
                 ))}
             </ul>
-            <h2>Rundenhistorie:</h2>
-            <table>
+            <h2 className="mt-4">Rundenhistorie:</h2>
+            <table className="table">
                 <thead>
                 <tr>
                     <th>Runde</th>
