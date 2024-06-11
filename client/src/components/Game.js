@@ -111,7 +111,7 @@ function Game({ roomId, username }) {
             )}
             <p className="d-none text-danger mt-3">{message}</p>
             <UserList users={connectedUsers} orderStatus={orderStatus} />
-            <RoundHistory roundHistory={roundHistory} connectedUsers={connectedUsers} />
+            <RoundHistory roundHistory={roundHistory} />
         </div>
     );
 }

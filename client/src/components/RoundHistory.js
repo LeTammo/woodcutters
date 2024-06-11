@@ -1,14 +1,8 @@
 import React from 'react';
 
-function RoundHistory({ roundHistory, connectedUsers }) {
-    const playerUsers = connectedUsers.filter(user => user.role === 'player');
-
+function RoundHistory({ roundHistory }) {
     return (
-        <div className="mt-4">
-            <h2>Rundenhistorie:</h2>
-            {playerUsers.map((user, index) => (
-                <div key={index} className="mb-2">{user.username}</div>
-            ))}
+        <div>
             {roundHistory.map((round, roundIndex) => (
                 <div key={roundIndex} className="mb-4">
                     <div className="fw-bold">Runde {round.round} beginnt</div>
