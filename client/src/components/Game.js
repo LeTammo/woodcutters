@@ -89,29 +89,44 @@ function Game({ roomId, username }) {
 
     return (
         <div className="container mt-3">
-            <p className="h5">Aktuelle Runde: {round}</p>
-            <p className="h5">Bäume im Wald: {trees}</p>
-            {!gameStarted ? (
-                role === 'player' && <button className="btn btn-primary" onClick={handleReady} disabled={isReady}>Bereit</button>
-            ) : !hasOrdered && !gameEnded && role === 'player' ? (
-                <div>
-                    <input
-                        type="number"
-                        value={order}
-                        onChange={(e) => setOrder(e.target.value)}
-                        className="form-control mb-2"
-                        placeholder="Anzahl Bäume"
-                    />
-                    <button className="btn btn-primary" onClick={placeOrder}>Bestellung aufgeben</button>
+            <div className="row">
+                <div className="col-3"></div>
+                <div className="col-3">
+                    <p className="h5">Aktuelle Runde: {round}</p>
+                    <p className="h5">Bäume im Wald: {trees}</p>
+                    {!gameStarted ? (
+                        role === 'player' &&
+                        <button className="btn btn-secondary" onClick={handleReady} disabled={isReady}>Bereit</button>
+                    ) : !hasOrdered && !gameEnded && role === 'player' ? (
+                        <div className="input-group mb-3">
+                            <input
+                                type="number"
+                                value={order}
+                                onChange={(e) => setOrder(e.target.value)}
+                                className="form-control"
+                                placeholder="Anzahl"
+                            />
+                            <button className="btn btn-secondary" onClick={placeOrder}>Bestellen</button>
+                        </div>
+                    ) : gameEnded ? (
+                        <p>Keine Bestellungen mehr möglich.</p>
+                    ) : (
+                        <p>Du hast {order} Bäume bestellt</p>
+                    )}
+                    <p className="d-none text-danger mt-3">{message}</p>
+                    <div className="mt-3">
+                        <UserList users={connectedUsers} orderStatus={orderStatus}/>
+                    </div>
                 </div>
-            ) : gameEnded ? (
-                <p>Keine Bestellungen mehr möglich.</p>
-            ) : (
-                <p>Du hast {order} Bäume bestellt</p>
-            )}
-            <p className="d-none text-danger mt-3">{message}</p>
-            <UserList users={connectedUsers} orderStatus={orderStatus} />
-            <RoundHistory roundHistory={roundHistory} users={connectedUsers} orderStatus={orderStatus} />
+                <div className="col-6">
+                    <RoundHistory
+                        roundHistory={roundHistory}
+                        users={connectedUsers}
+                        orderStatus={orderStatus}
+                        gameRunning={gameStarted && !gameEnded}
+                    />
+                </div>
+            </div>
         </div>
     );
 }
