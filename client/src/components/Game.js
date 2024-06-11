@@ -100,7 +100,7 @@ function Game({ roomId, username }) {
                     ) : !hasOrdered && !gameEnded && role === 'player' ? (
                         <div className="input-group mb-3">
                             <input
-                                type="number"
+                                type="number" min={0} max={trees}
                                 value={order}
                                 onChange={(e) => setOrder(e.target.value)}
                                 className="form-control"
