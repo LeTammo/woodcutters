@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { socket } from '../socket';
 import UserList from './UserList';
 import RoundHistory from './RoundHistory';
+import Chat from './Chat';
 
 function Game({ roomId, username }) {
     const [trees, setTrees] = useState(0);
@@ -111,7 +112,7 @@ function Game({ roomId, username }) {
                     )}
                     {!gameStarted ? (
                         role === 'player' &&
-                        <button className="btn btn-secondary mt-3" onClick={handleReady} disabled={isReady}>Bereit</button>
+                        <button className="btn btn-success mt-3" onClick={handleReady} disabled={isReady}>Bereit</button>
                     ) : !hasOrdered && !gameEnded && role === 'player' ? (
                         <div className="input-group mb-3">
                             <input
@@ -131,6 +132,9 @@ function Game({ roomId, username }) {
                     <p className="d-none text-danger mt-3">{message}</p>
                     <div className="mt-3">
                         <UserList users={connectedUsers} orderStatus={orderStatus}/>
+                    </div>
+                    <div className="mt-3">
+                        <Chat username={username} />
                     </div>
                 </div>
                 <div className="col-12 col-sm-6 col-md-8">

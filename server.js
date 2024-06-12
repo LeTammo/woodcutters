@@ -124,6 +124,15 @@ io.on('connection', (socket) => {
         }
     });
 
+    socket.on('sendMessage', ({ username, message }) => {
+        const user = users[socket.id];
+        if (user && rooms[user.roomId]) {
+            const roomId = user.roomId;
+            const room = rooms[roomId];
+            io.to(roomId).emit('receiveMessage', { username, message });
+        }
+    });
+
     socket.on('disconnect', () => {
         const user = users[socket.id];
         if (user) {
