@@ -1,7 +1,7 @@
 import React from 'react';
 
 const GameControls = (
-    { gameStarted, role, isReady, handleReady, hasOrdered, gameEnded, trees, order, setOrder, placeOrder, message }
+    { gameStarted, role, hasOrdered, gameEnded, trees, order, setOrder, placeOrder, message }
 ) => {
     return (
         <div className="game-controls">
@@ -16,7 +16,6 @@ const GameControls = (
                         type="number"
                         min={0}
                         max={trees}
-                        value={order}
                         onChange={(e) => setOrder(e.target.value)}
                         onKeyUp={(e) => e.key === 'Enter' && placeOrder()}
                         className="form-control border-dark shadow-none"
