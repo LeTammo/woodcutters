@@ -1,7 +1,7 @@
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
-const { nanoid } = require('nanoid');
+const { customAlphabet } = require('nanoid');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
@@ -10,6 +10,7 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 const db = new sqlite3.Database('./game.db');
+const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvw', 7)
 
 db.serialize(() => {
     db.run(`CREATE TABLE IF NOT EXISTS sessions (
@@ -38,6 +39,7 @@ const maxRounds = 5;
 app.use(express.static('client/build'));
 
 let rooms = {};
+const users = {};
 
 app.get('/session/:sessionId', (req, res) => {
     const sessionId = req.params.sessionId;
@@ -50,13 +52,11 @@ app.get('/session/:sessionId', (req, res) => {
     });
 });
 
-const users = {}; // Store user information with their socket id as the key
-
 io.on('connection', (socket) => {
     let currentRoomId = null;
 
     socket.on('createRoom', (username) => {
-        const roomId = nanoid(7);
+        const roomId = nanoid();
         rooms[roomId] = {
             trees: maxTrees,
             currentRound: 0,
