@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../socket';
 import UserList from './UserList';
+import ShareLink from './ShareLink';
 import RoundHistory from './RoundHistory';
 import Chat from './Chat';
 
@@ -17,7 +18,6 @@ function Game({ roomId, username }) {
     const [isReady, setIsReady] = useState(false);
     const [gameStarted, setGameStarted] = useState(false);
     const [role, setRole] = useState('player');
-    const [copied, setCopied] = useState(false);
 
     useEffect(() => {
         socket.emit('joinRoom', { roomId, username });
@@ -89,12 +89,6 @@ function Game({ roomId, username }) {
         setIsReady(true);
     };
 
-    const handleCopyLink = () => {
-        navigator.clipboard.writeText(window.location.href);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-    };
-
     return (
         <div className="align-items-center g-lg-5 py-5">
             <div className="row p-4 p-md-5 border rounded-3 bg-body-tertiary">
@@ -102,13 +96,7 @@ function Game({ roomId, username }) {
                     {gameStarted ? (
                         <p>Bäume im Wald: {trees}</p>
                     ) : (
-                        <div>
-                            <div>Share-Link:</div>
-                            <button className="btn btn-dark" onClick={handleCopyLink}>
-                                <span className="text-primary-emphasis">{window.location.href}</span> 📋
-                            </button>
-                            {copied && <span className="text-success">Copied!</span>} {/* Indicator */}
-                        </div>
+                        <ShareLink />
                     )}
                     {!gameStarted ? (
                         role === 'player' &&
