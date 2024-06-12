@@ -28,27 +28,25 @@ function Home() {
     };
 
     return (
-        <div className="container px-4 py-5">
-            <div className="row align-items-center g-lg-5 py-5">
-                <div className="mx-auto col-sm-12 col-md-10 col-lg-6">
-                    <div className="p-4 p-md-5 border rounded-3 bg-body-tertiary">
-                        <h3 className="text-center mb-5">Hallo {sessionStorage.getItem('username')} :)</h3>
-                        <div>
-                            <button className="btn btn-success" onClick={createRoom}>Raum erstellen</button>
-                        </div>
-                        <div className="my-3">oder</div>
-                        <div>
-                            <input
-                                type="text"
-                                value={roomId}
-                                onChange={(e) => setRoomId(e.target.value)}
-                                className="form-control form-floating mb-3"
-                                placeholder="Raum ID"
-                            />
-                        </div>
-                        <div>
-                            <button className="btn btn-primary" onClick={joinRoom}>Raum beitreten</button>
-                        </div>
+        <div className="row align-items-center g-lg-5 py-5">
+            <div className="mx-auto col-sm-12 col-md-10 col-lg-6">
+                <div className="p-4 p-md-5 border rounded-3 bg-body-tertiary">
+                    <h5 className="text-center mb-5">Hallo {sessionStorage.getItem('username')} :)</h5>
+                    <div>
+                        <button className="btn btn-success" onClick={createRoom}>Raum erstellen</button>
+                    </div>
+                    <div className="my-3">oder</div>
+                    <div>
+                        <input
+                            type="text"
+                            value={roomId}
+                            onChange={(e) => setRoomId(e.target.value)}
+                            className="form-control form-floating mb-3"
+                            placeholder="Raum ID"
+                        />
+                    </div>
+                    <div>
+                        <button className="btn btn-primary" onClick={joinRoom}>Raum beitreten</button>
                     </div>
                 </div>
             </div>

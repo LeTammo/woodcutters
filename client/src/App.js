@@ -23,21 +23,19 @@ function App() {
 
     if (!username) {
         return (
-            <div className="container px-4 py-5">
-                <div className="row align-items-center g-lg-5 py-5">
-                    <div className="mx-auto col-sm-12 col-md-10 col-lg-6">
-                        <div className="p-4 p-md-5 border rounded-3 bg-body-tertiary">
-                            <div className="input-group">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Wie möchtest du heißen?"
-                                    onKeyUp={handleKeyPress}
-                                />
-                                <button className="btn btn-success" onClick={handleSetUsername}>
-                                    Starten
-                                </button>
-                            </div>
+            <div className="row align-items-center g-lg-5 py-5">
+                <div className="mx-auto col-sm-12 col-md-10 col-lg-6">
+                    <div className="p-4 p-md-5 border rounded-3 bg-body-tertiary">
+                        <div className="input-group">
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Wie möchtest du heißen?"
+                                onKeyUp={handleKeyPress}
+                            />
+                            <button className="btn btn-success" onClick={handleSetUsername}>
+                                Starten
+                            </button>
                         </div>
                     </div>
                 </div>
