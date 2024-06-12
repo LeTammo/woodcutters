@@ -19,7 +19,7 @@ const GameControls = (
                         value={order}
                         onChange={(e) => setOrder(e.target.value)}
                         onKeyUp={(e) => e.key === 'Enter' && placeOrder()}
-                        className="form-control border-dark"
+                        className="form-control border-dark shadow-none"
                         placeholder="Anzahl der Bäume"
                     />
                     <button className="btn btn-dark" onClick={placeOrder}>Bestellen</button>

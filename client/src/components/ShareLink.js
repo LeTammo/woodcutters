@@ -15,7 +15,7 @@ function ShareLink() {
             <div className="input-group">
                 <input
                     type="text"
-                    className="form-control border-dark"
+                    className="form-control border-dark shadow-none"
                     id="shareLink"
                     value={window.location.href}
                     readOnly

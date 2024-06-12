@@ -29,7 +29,7 @@ function App() {
                         <div className="input-group">
                             <input
                                 type="text"
-                                className="form-control"
+                                className="form-control shadow-none"
                                 placeholder="Wie möchtest du heißen?"
                                 onKeyUp={handleKeyPress}
                             />

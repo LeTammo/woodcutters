@@ -66,7 +66,7 @@ function Chat({ username, users }) {
                     onChange={handleMessageChange}
                     onKeyUp={handleKeyPress}
                     placeholder="Type your message..."
-                    className="form-control border-primary-subtle"
+                    className="form-control border-primary-subtle shadow-none"
                 />
                 <button onClick={handleSendMessage} className="btn btn-dark border-primary-subtle">Send</button>
             </div>

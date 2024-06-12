@@ -41,7 +41,7 @@ function Home() {
                             type="text"
                             value={roomId}
                             onChange={(e) => setRoomId(e.target.value)}
-                            className="form-control form-floating mb-3"
+                            className="form-control form-floating mb-3 shadow-none"
                             placeholder="Raum ID"
                         />
                     </div>
