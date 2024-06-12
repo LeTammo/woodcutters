@@ -21,7 +21,6 @@ function App() {
                 <div className="row align-items-center g-lg-5 py-5">
                     <div className="col-md-10 mx-auto col-lg-5">
                         <div className="p-4 p-md-5 border rounded-3 bg-body-tertiary">
-
                             <input
                                 type="text"
                                 className="form-control mb-2"
