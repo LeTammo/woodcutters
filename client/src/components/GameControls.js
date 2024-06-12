@@ -7,10 +7,7 @@ const GameControls = (
         <div className="game-controls">
             {gameStarted && <p>Bäume im Wald: {trees}</p>}
             {!gameStarted ? (
-                role === 'player' &&
-                <button className={`btn ${isReady ? 'btn-secondary' : 'btn-success'} mt-3`} onClick={handleReady} disabled={isReady}>
-                    {isReady ? 'Bereit' : 'Bereit'}
-                </button>
+                ""
             ) : !hasOrdered && !gameEnded && role === 'player' ? (
                 <div className="input-group mb-3">
                     <label htmlFor="treeOrder" className="form-label d-none">Anzahl der Bäume:</label>

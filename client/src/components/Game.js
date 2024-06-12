@@ -93,8 +93,6 @@ function Game({ roomId, username }) {
         <div className="align-items-center g-lg-5 py-5">
             <div className="row p-4 p-md-5 border rounded-3 bg-body-tertiary">
                 <div className="col-12 col-sm-6 col-md-4">
-                    {!gameStarted && <ShareLink />}
-
                     <GameControls
                         gameStarted={gameStarted}
                         role={role}
@@ -113,12 +111,24 @@ function Game({ roomId, username }) {
                     </div>
                 </div>
                 <div className="col-12 col-sm-6 col-md-8">
-                    <RoundHistory
-                        roundHistory={roundHistory}
-                        users={connectedUsers}
-                        orderStatus={orderStatus}
-                        gameRunning={gameStarted && !gameEnded}
-                    />
+                    {!gameStarted
+                        ? (
+                            <div>
+                                <ShareLink />
+                                <button className={`btn ${isReady ? 'btn-secondary' : 'btn-success'} mt-3`} onClick={handleReady} disabled={isReady}>
+                                    {isReady ? 'Bereit' : 'Bereit'}
+                                </button>
+                            </div>
+                        )
+                        : (
+                            <RoundHistory
+                                roundHistory={roundHistory}
+                                users={connectedUsers}
+                                orderStatus={orderStatus}
+                                gameRunning={gameStarted && !gameEnded}
+                            />
+                        )
+                    }
                 </div>
             </div>
         </div>
