@@ -88,11 +88,9 @@ function Game({ roomId, username }) {
     };
 
     return (
-        <div className="container mt-3">
-            <div className="row">
-                <div className="col-3"></div>
-                <div className="col-3">
-                    <p className="h5">Aktuelle Runde: {round}</p>
+        <div className="align-items-center g-lg-5 py-5">
+            <div className="row p-4 p-md-5 border rounded-3">
+                <div className="col-12 col-sm-6 col-md-4">
                     <p className="h5">Bäume im Wald: {trees}</p>
                     {!gameStarted ? (
                         role === 'player' &&
@@ -118,7 +116,7 @@ function Game({ roomId, username }) {
                         <UserList users={connectedUsers} orderStatus={orderStatus}/>
                     </div>
                 </div>
-                <div className="col-6">
+                <div className="col-12 col-sm-6 col-md-8">
                     <RoundHistory
                         roundHistory={roundHistory}
                         users={connectedUsers}
