@@ -117,7 +117,7 @@ function Game({ roomId, username }) {
                     ) : (
                         <p>Du hast {order} Bäume bestellt</p>
                     )}
-                    <p className="d-none text-danger mt-3">{message}</p>
+                    {message && <p className="text-info mt-3">{message}</p>}
                     <div className="mt-3">
                         <UserList users={connectedUsers} orderStatus={orderStatus}/>
                     </div>
