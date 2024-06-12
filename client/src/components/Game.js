@@ -4,6 +4,7 @@ import UserList from './UserList';
 import ShareLink from './ShareLink';
 import RoundHistory from './RoundHistory';
 import Chat from './Chat';
+import GameControls from './GameControls';
 
 function Game({ roomId, username }) {
     const [trees, setTrees] = useState(0);
@@ -93,36 +94,21 @@ function Game({ roomId, username }) {
         <div className="align-items-center g-lg-5 py-5">
             <div className="row p-4 p-md-5 border rounded-3 bg-body-tertiary">
                 <div className="col-12 col-sm-6 col-md-4">
-                    {gameStarted ? (
-                        <p>Bäume im Wald: {trees}</p>
-                    ) : (
-                        <ShareLink />
-                    )}
-                    {!gameStarted ? (
-                        role === 'player' &&
-                        <button className="btn btn-success mt-3" onClick={handleReady} disabled={isReady}>Bereit</button>
-                    ) : !hasOrdered && !gameEnded && role === 'player' ? (
-                        <div className="input-group mb-3">
-                            <label htmlFor="treeOrder" className="form-label d-none">Anzahl der Bäume:</label>
-                            <input
-                                id="treeOrder"
-                                type="number"
-                                min={0}
-                                max={trees}
-                                value={order}
-                                onChange={(e) => setOrder(e.target.value)}
-                                onKeyUp={(e) => e.key === 'Enter' && placeOrder()}
-                                className="form-control border-dark"
-                                placeholder="Anzahl der Bäume"
-                            />
-                            <button className="btn btn-dark" onClick={placeOrder}>Bestellen</button>
-                        </div>
-                    ) : gameEnded ? (
-                        <p>Keine Bestellungen mehr möglich.</p>
-                    ) : (
-                        <p>Du hast {order} Bäume bestellt</p>
-                    )}
-                    {message && <p className="text-info mt-3">{message}</p>}
+                    {!gameStarted && <ShareLink />}
+
+                    <GameControls
+                        gameStarted={gameStarted}
+                        role={role}
+                        isReady={isReady}
+                        handleReady={handleReady}
+                        hasOrdered={hasOrdered}
+                        gameEnded={gameEnded}
+                        trees={trees}
+                        order={order}
+                        setOrder={setOrder}
+                        placeOrder={placeOrder}
+                        message={message}
+                    />
                     <div className="mt-3">
                         <UserList users={connectedUsers} orderStatus={orderStatus}/>
                     </div>
