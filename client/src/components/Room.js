@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { socket } from '../socket';
 import Game from './Game';
 
@@ -7,6 +7,7 @@ function Room() {
     const { roomId } = useParams();
     const [username, setUsername] = useState('');
     const [isUsernameSet, setIsUsernameSet] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const savedUsername = sessionStorage.getItem('username');
@@ -14,8 +15,10 @@ function Room() {
             setUsername(savedUsername);
             setIsUsernameSet(true);
             socket.emit('joinRoom', { roomId, username: savedUsername });
+        } else {
+            navigate('/username', { state: { redirectTo: `/${roomId}` } });
         }
-    }, [roomId]);
+    }, [roomId, navigate]);
 
     const handleSetUsername = () => {
         if (username.trim() !== '') {

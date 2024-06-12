@@ -8,25 +8,21 @@ function Home() {
 
     const createRoom = () => {
         const storedUsername = sessionStorage.getItem('username');
-        const username = storedUsername || prompt("Geben Sie Ihren Benutzernamen ein:");
-        if (!username) return;
         if (!storedUsername) {
-            sessionStorage.setItem('username', username);
+            navigate('/username', { state: { redirectTo: '/newroom' } });
+        } else {
+            socket.emit('createRoom', storedUsername);
+            socket.on('roomCreated', (id) => {
+                navigate(`/${id}`);
+            });
         }
-        socket.emit('createRoom', username);
-        socket.on('roomCreated', (id) => {
-            navigate(`/${id}`);
-        });
     };
 
     const joinRoom = () => {
         const storedUsername = sessionStorage.getItem('username');
-        const username = storedUsername || prompt("Geben Sie Ihren Benutzernamen ein:");
-        if (!username) return;
         if (!storedUsername) {
-            sessionStorage.setItem('username', username);
-        }
-        if (roomId.trim() !== '') {
+            navigate('/username', { state: { redirectTo: roomId } });
+        } else if (roomId.trim() !== '') {
             navigate(`/${roomId}`);
         }
     };
@@ -36,18 +32,17 @@ function Home() {
             <div className="row align-items-center g-lg-5 py-5">
                 <div className="col-md-10 mx-auto col-lg-5">
                     <div className="p-4 p-md-5 border rounded-3 bg-body-tertiary">
+                        <h3 className="text-center mb-5">Hallo {sessionStorage.getItem('username')} :)</h3>
                         <div>
                             <button className="btn btn-success" onClick={createRoom}>Raum erstellen</button>
                         </div>
-                        <div className="my-3">
-                            oder
-                        </div>
+                        <div className="my-3">oder</div>
                         <div>
                             <input
                                 type="text"
                                 value={roomId}
                                 onChange={(e) => setRoomId(e.target.value)}
-                                className="form-control form-floating mb-3 my-5"
+                                className="form-control form-floating mb-3"
                                 placeholder="Raum ID"
                             />
                         </div>
