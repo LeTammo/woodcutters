@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../socket';
-import UserList from './UserList';
 import ShareLink from './ShareLink';
 import RoundHistory from './RoundHistory';
 import Chat from './Chat';
@@ -110,10 +109,7 @@ function Game({ roomId, username }) {
                         message={message}
                     />
                     <div className="mt-3">
-                        <UserList users={connectedUsers} orderStatus={orderStatus}/>
-                    </div>
-                    <div className="mt-3">
-                        <Chat username={username} />
+                        <Chat username={username} users={connectedUsers} />
                     </div>
                 </div>
                 <div className="col-12 col-sm-6 col-md-8">

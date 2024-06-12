@@ -1,5 +1,4 @@
 import React from 'react';
-import UserList from "./UserList";
 
 function RoundHistory({ roundHistory, users, orderStatus, gameRunning }) {
     return (
