@@ -103,14 +103,19 @@ function Game({ roomId, username }) {
                         <button className="btn btn-success mt-3" onClick={handleReady} disabled={isReady}>Bereit</button>
                     ) : !hasOrdered && !gameEnded && role === 'player' ? (
                         <div className="input-group mb-3">
+                            <label htmlFor="treeOrder" className="form-label d-none">Anzahl der Bäume:</label>
                             <input
-                                type="number" min={0} max={trees}
+                                id="treeOrder"
+                                type="number"
+                                min={0}
+                                max={trees}
                                 value={order}
                                 onChange={(e) => setOrder(e.target.value)}
-                                className="form-control"
-                                placeholder="Anzahl"
+                                onKeyUp={(e) => e.key === 'Enter' && placeOrder()}
+                                className="form-control border-dark"
+                                placeholder="Anzahl der Bäume"
                             />
-                            <button className="btn btn-secondary" onClick={placeOrder}>Bestellen</button>
+                            <button className="btn btn-dark" onClick={placeOrder}>Bestellen</button>
                         </div>
                     ) : gameEnded ? (
                         <p>Keine Bestellungen mehr möglich.</p>
