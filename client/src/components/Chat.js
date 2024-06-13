@@ -51,7 +51,7 @@ function Chat({ username, users }) {
                     </div>
                 ))}
             </div>
-            <div className="flex-grow-1 overflow-auto p-3 pb-1 hide-scrollbar d-flex flex-column justify-content-end" style={{minHeight: '0px'}}>
+            <div className="flex-grow-1 overflow-auto p-3 pb-1 hide-scrollbar" style={{ minHeight: '0px' }}>
                 {messages.map((msg, index) => (
                     <div className="text-start" key={index}>
                         <strong className="text-primary-emphasis">{msg.username}:</strong> {msg.message}
