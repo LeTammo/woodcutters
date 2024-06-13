@@ -42,16 +42,16 @@ function Chat({ username, users }) {
     };
 
     return (
-        <div className="bg-dark rounded d-flex flex-column" style={{height: '500px'}}>
-            <div className="fw-bold p-2">Chat</div>
+        <div className="shadow-lg rounded border border-1 border-dark d-flex flex-column" style={{height: '500px'}}>
+            <div className="fw-bold p-3 border-bottom border-1 shadow border-dark">Chat</div>
             <div className="d-flex flex-wrap p-2">
                 {users.map((user, index) => (
-                    <div key={index} className="border border-primary-subtle rounded m-1 px-1">
+                    <div key={index} className="shadow px-2 py-1 m-2 border border-dark border-2 rounded">
                         {user.username} {user.role !== 'player' && '(👀)'}
                     </div>
                 ))}
             </div>
-            <div className="flex-grow-1 overflow-auto p-2 hide-scrollbar d-flex flex-column justify-content-end" style={{minHeight: '0px'}}>
+            <div className="flex-grow-1 overflow-auto p-3 pb-1 hide-scrollbar d-flex flex-column justify-content-end" style={{minHeight: '0px'}}>
                 {messages.map((msg, index) => (
                     <div className="text-start" key={index}>
                         <strong className="text-primary-emphasis">{msg.username}:</strong> {msg.message}
@@ -59,16 +59,16 @@ function Chat({ username, users }) {
                 ))}
                 <div ref={messagesEndRef}/>
             </div>
-            <div className="input-group p-2">
+            <div className="input-group p-3 pt-1">
                 <input
                     type="text"
                     value={message}
                     onChange={handleMessageChange}
                     onKeyUp={handleKeyPress}
                     placeholder="Type your message..."
-                    className="form-control border-primary-subtle shadow-none"
+                    className="form-control bg-dark border-dark shadow-none"
                 />
-                <button onClick={handleSendMessage} className="btn btn-dark border-primary-subtle">Send</button>
+                <button onClick={handleSendMessage} className="btn btn-dark border-dark">Send</button>
             </div>
         </div>
     );
