@@ -39,7 +39,7 @@ const maxRounds = 5;
 app.use(express.static('client/build'));
 
 let rooms = {};
-const users = {};
+//const users = {};
 
 app.get('/session/:sessionId', (req, res) => {
     const sessionId = req.params.sessionId;
@@ -57,39 +57,41 @@ io.on('connection', (socket) => {
 
     socket.on('createRoom', (username) => {
         const roomId = nanoid();
+        const playerId = nanoid();
+
         rooms[roomId] = {
             trees: maxTrees,
             currentRound: 0,
-            users: [{ id: socket.id, username, ready: false, role: 'player' }],
+            users: [{ id: socket.id, playerId, username, online: true, ready: false, role: 'player' }],
             orders: [],
             roundHistory: [],
             gameStarted: false,
             gameEnded: false
         };
-        users[socket.id] = { username, roomId };
+
         currentRoomId = roomId;
         socket.join(roomId);
-        socket.emit('roomCreated', roomId);
+        socket.emit('roomCreated', { roomId, playerId });
         io.to(roomId).emit('updateUsers', rooms[roomId].users);
     });
 
-    socket.on('joinRoom', ({ roomId, username }) => {
+    socket.on('joinRoom', ({ roomId, username, playerId }) => {
+        currentRoomId = roomId;
+
         if (!rooms[roomId]) {
             socket.emit('error', 'Room does not exist');
             return;
         }
 
         const room = rooms[roomId];
-        const isUserAlreadyInRoom = room.users.some(user => user.username === username);
-
-        if (room.gameStarted && !isUserAlreadyInRoom) {
-            room.users.push({ id: socket.id, username, ready: true, role: 'spectator' });
-        } else if (!isUserAlreadyInRoom) {
-            room.users.push({ id: socket.id, username, ready: false, role: 'player' });
+        if (room.users.some(user => user.username === username && user.playerId === playerId)) {
+            // everything is fine
+        } else if (!room.gameStarted) {
+            room.users.push({ id: socket.id, playerId, username, ready: false, role: 'player' });
+        } else {
+            room.users.push({ id: socket.id, playerId, username, ready: true, role: 'spectator' });
         }
 
-        users[socket.id] = { username, roomId };
-        currentRoomId = roomId;
         socket.join(roomId);
         io.to(roomId).emit('updateUsers', room.users);
     });
@@ -110,12 +112,12 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('order', (numTrees) => {
+    socket.on('order', ({ numTrees, playerId }) => {
         if (!currentRoomId || !rooms[currentRoomId] || rooms[currentRoomId].gameEnded) return;
 
         const room = rooms[currentRoomId];
-        room.orders.push({ id: socket.id, numTrees });
-        const user = room.users.find(user => user.id === socket.id);
+        room.orders.push({ playerId, numTrees });
+        const user = room.users.find(user => user.playerId === playerId);
         if (user) {
             io.to(currentRoomId).emit('orderStatus', { [user.username]: true });
         }
@@ -124,24 +126,42 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('sendMessage', ({ username, message }) => {
-        const user = users[socket.id];
-        if (user && rooms[user.roomId]) {
-            const roomId = user.roomId;
+    socket.on('sendMessage', ({ playerId, message }) => {
+        const user = rooms[currentRoomId].users.find(user => user.playerId === playerId);
+        if (user) {
+            io.to(currentRoomId).emit('receiveMessage', { username: user.username, message });
+        }
+    });
+
+    socket.on('requestGameState', ({ roomId, playerId }) => {
+        if (!currentRoomId || !rooms[currentRoomId]) {
+            return;
+        }
+        const user = rooms[currentRoomId].users.find(user => user.playerId === playerId);
+        if (user) {
             const room = rooms[roomId];
-            io.to(roomId).emit('receiveMessage', { username, message });
+            socket.emit('gameState', {
+                trees: room.trees,
+                round: room.currentRound,
+                orders: room.orders,
+                roundHistory: room.roundHistory,
+                gameStarted: room.gameStarted,
+                gameEnded: room.gameEnded,
+                users: room.users
+            });
         }
     });
 
     socket.on('disconnect', () => {
-        const user = users[socket.id];
+        if (!currentRoomId || !rooms[currentRoomId]) {
+            return;
+        }
+        const user = rooms[currentRoomId].users.find(user => user.id === socket.id);
         if (user) {
-            const { roomId } = user;
-            if (rooms[roomId]) {
-                rooms[roomId].users = rooms[roomId].users.filter(user => user.id !== socket.id);
-                io.to(roomId).emit('updateUsers', rooms[roomId].users);
+            if (rooms[currentRoomId]) {
+                user.online = false;
+                io.to(currentRoomId).emit('updateUsers', rooms[currentRoomId].users);
             }
-            delete users[socket.id];
         }
     });
 });
@@ -164,7 +184,7 @@ function processOrders(roomId) {
     };
 
     room.orders.forEach(order => {
-        const user = room.users.find(user => user.id === order.id);
+        const user = room.users.find(user => user.playerId === order.playerId);
         roundDetails.orderSequence.push(user.username);
 
         if (room.trees >= order.numTrees) {
@@ -181,15 +201,6 @@ function processOrders(roomId) {
     roundDetails.totalFelled = totalFelled;
     roundDetails.remainingTrees = room.trees;
 
-    if (room.trees <= 0) {
-        room.trees = 0;
-        room.gameEnded = true;
-        io.to(roomId).emit('update', { trees: room.trees, round: room.currentRound });
-        io.to(roomId).emit('roundHistory', room.roundHistory);
-        io.to(roomId).emit('end', 'Der Wald hat keine Bäume mehr. Das Spiel ist beendet.');
-        return;
-    }
-
     growTrees(room);
     roundDetails.newGrowth = room.trees - roundDetails.remainingTrees;
     room.roundHistory.push(roundDetails);
@@ -200,6 +211,12 @@ function processOrders(roomId) {
 
     db.run("INSERT INTO rounds (session_id, round, orders, total_ordered, total_felled, remaining_trees, new_growth, order_sequence) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
         [roomId, room.currentRound, JSON.stringify(roundDetails.orders), totalOrdered, totalFelled, roundDetails.remainingTrees, roundDetails.newGrowth, roundDetails.orderSequence.join(', ')]);
+
+    if (room.trees <= 0) {
+        room.gameEnded = true;
+        io.to(roomId).emit('end', 'Der Wald hat keine Bäume mehr. Das Spiel ist beendet.');
+        return;
+    }
 
     if (room.currentRound >= maxRounds) {
         room.gameEnded = true;

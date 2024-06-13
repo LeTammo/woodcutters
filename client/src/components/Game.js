@@ -20,13 +20,27 @@ function Game({ roomId, username }) {
     const [role, setRole] = useState('player');
 
     useEffect(() => {
-        socket.emit('joinRoom', { roomId, username });
+        const playerId = sessionStorage.getItem('playerId');
+        socket.emit('joinRoom', { roomId, username, playerId });
+        socket.emit('requestGameState', { roomId, playerId });
 
         const updateHandler = (data) => {
+            console.log(data)
             setTrees(data.trees);
             setRound(data.round);
             setHasOrdered(false);
             setOrderStatus({});
+        };
+
+        const gameStateHandler = (data) => {
+            setTrees(data.trees);
+            setRound(data.round);
+            setHasOrdered(false);
+            setOrderStatus({});
+            setRoundHistory(data.roundHistory);
+            setGameStarted(data.gameStarted);
+            setGameEnded(data.gameEnded);
+            setConnectedUsers(data.users);
         };
 
         const resultHandler = (msg) => {
@@ -46,6 +60,7 @@ function Game({ roomId, username }) {
         };
 
         const roundHistoryHandler = (history) => {
+            console.log(history)
             setRoundHistory(history);
         };
 
@@ -59,6 +74,7 @@ function Game({ roomId, username }) {
         };
 
         socket.on('update', updateHandler);
+        socket.on('gameState', gameStateHandler);
         socket.on('result', resultHandler);
         socket.on('updateUsers', updateUsersHandler);
         socket.on('orderStatus', orderStatusHandler);
@@ -68,6 +84,7 @@ function Game({ roomId, username }) {
 
         return () => {
             socket.off('update', updateHandler);
+            socket.off('gameState', gameStateHandler);
             socket.off('result', resultHandler);
             socket.off('updateUsers', updateUsersHandler);
             socket.off('orderStatus', orderStatusHandler);
@@ -79,7 +96,9 @@ function Game({ roomId, username }) {
 
     const placeOrder = () => {
         if (!gameEnded && role === 'player') {
-            socket.emit('order', parseInt(order));
+            const numTrees = parseInt(order);
+            const playerId = sessionStorage.getItem('playerId');
+            socket.emit('order', { numTrees, playerId });
             setHasOrdered(true);
         }
     };
@@ -107,7 +126,7 @@ function Game({ roomId, username }) {
                         message={message}
                     />
                     <div className="mt-3">
-                        <Chat username={username} users={connectedUsers} />
+                        <Chat users={connectedUsers} />
                     </div>
                 </div>
                 <div className="col-12 col-sm-6 col-md-8">

@@ -7,22 +7,14 @@ function Home() {
     const navigate = useNavigate();
 
     const createRoom = () => {
-        const storedUsername = sessionStorage.getItem('username');
-        if (!storedUsername) {
-            navigate('/username', { state: { redirectTo: '/newroom' } });
-        } else {
-            socket.emit('createRoom', storedUsername);
-            socket.on('roomCreated', (id) => {
-                navigate(`/${id}`);
-            });
-        }
+        socket.emit('createRoom', sessionStorage.getItem('username'));
+        socket.on('roomCreated', ({ roomId, playerId }) => {
+            navigate(`/${roomId}`);
+        });
     };
 
     const joinRoom = () => {
-        const storedUsername = sessionStorage.getItem('username');
-        if (!storedUsername) {
-            navigate('/username', { state: { redirectTo: roomId } });
-        } else if (roomId.trim() !== '') {
+        if (roomId.trim() !== '') {
             navigate(`/${roomId}`);
         }
     };

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { socket } from './socket';
 import Home from './components/Home';
 import Room from './components/Room';
 import './styles/App.css';
@@ -10,8 +11,13 @@ function App() {
         if (username.trim() !== '') {
             sessionStorage.setItem('username', username);
             setUsername(username);
+            socket.emit('createRoom', username);
         }
     };
+
+    socket.on('roomCreated', ({ roomId, playerId }) => {
+        sessionStorage.setItem('playerId', playerId);
+    });
 
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
