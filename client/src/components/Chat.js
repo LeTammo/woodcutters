@@ -4,11 +4,11 @@ import { socket } from '../socket';
 function Chat({ username, users }) {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
-    const messagesEndRef = useRef(null);
+    const chatContainerRef = useRef(null);
 
     useEffect(() => {
         const handleReceiveMessage = ({ username, message }) => {
-            setMessages([...messages, { username, message }]);
+            setMessages(prevMessages => [...prevMessages, { username, message }]);
         };
 
         socket.on('receiveMessage', handleReceiveMessage);
@@ -16,11 +16,11 @@ function Chat({ username, users }) {
         return () => {
             socket.off('receiveMessage', handleReceiveMessage);
         };
-    }, [messages]);
+    }, []);
 
     useEffect(() => {
-        if (messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
     }, [messages]);
 
@@ -51,13 +51,13 @@ function Chat({ username, users }) {
                     </div>
                 ))}
             </div>
-            <div className="flex-grow-1 overflow-auto p-3 pb-1 hide-scrollbar" style={{ minHeight: '0px' }}>
+            <div ref={chatContainerRef} className="flex-grow-1 overflow-auto p-3 pb-1 hide-scrollbar" style={{ minHeight: '0px' }}>
                 {messages.map((msg, index) => (
                     <div className="text-start" key={index}>
                         <strong className="text-primary-emphasis">{msg.username}:</strong> {msg.message}
                     </div>
                 ))}
-                <div ref={messagesEndRef}/>
+                <div />
             </div>
             <div className="input-group p-3 pt-1">
                 <input
