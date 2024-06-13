@@ -23,7 +23,7 @@ function Home() {
         <div className="row align-items-center g-lg-5 py-5">
             <div className="mx-auto col-sm-12 col-md-10 col-lg-6">
                 <div className="p-4 p-md-5 border rounded-3 bg-body-tertiary">
-                    <h5 className="text-center mb-5">Hallo {sessionStorage.getItem('username')} :)</h5>
+                    <h5 className="text-center mb-5">Hallo {sessionStorage.getItem('username')}!</h5>
                     <div>
                         <button className="btn btn-success" onClick={createRoom}>Raum erstellen</button>
                     </div>
