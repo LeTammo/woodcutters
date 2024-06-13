@@ -6,7 +6,7 @@ import Chat from './Chat';
 import GameControls from './GameControls';
 
 function Game({ roomId, username }) {
-    const [trees, setTrees] = useState(0);
+    const [trees, setTrees] = useState(100);
     const [round, setRound] = useState(0);
     const [order, setOrder] = useState(0);
     const [message, setMessage] = useState('');
