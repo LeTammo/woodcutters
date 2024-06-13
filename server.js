@@ -181,6 +181,15 @@ function processOrders(roomId) {
     roundDetails.totalFelled = totalFelled;
     roundDetails.remainingTrees = room.trees;
 
+    if (room.trees <= 0) {
+        room.trees = 0;
+        room.gameEnded = true;
+        io.to(roomId).emit('update', { trees: room.trees, round: room.currentRound });
+        io.to(roomId).emit('roundHistory', room.roundHistory);
+        io.to(roomId).emit('end', 'Der Wald hat keine Bäume mehr. Das Spiel ist beendet.');
+        return;
+    }
+
     growTrees(room);
     roundDetails.newGrowth = room.trees - roundDetails.remainingTrees;
     room.roundHistory.push(roundDetails);
@@ -194,7 +203,7 @@ function processOrders(roomId) {
 
     if (room.currentRound >= maxRounds) {
         room.gameEnded = true;
-        io.to(roomId).emit('end');//, 'Das Spiel ist beendet.');
+        io.to(roomId).emit('end', 'Alle Runden wurden gespielt. Das Spiel ist beendet.');
     }
 }
 

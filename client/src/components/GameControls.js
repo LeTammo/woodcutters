@@ -28,7 +28,7 @@ const GameControls = (
             ) : (
                 <p>Du hast {order} Bäume bestellt</p>
             )}
-            {message && <p className="text-info mt-3">{message}</p>}
+            {message && <p className="text-info-emphasis mt-3">{message}</p>}
         </div>
     );
 };

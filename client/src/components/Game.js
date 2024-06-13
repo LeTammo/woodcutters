@@ -55,7 +55,7 @@ function Game({ roomId, username }) {
 
         const endHandler = (msg) => {
             setGameEnded(true);
-            //setMessage(msg);
+            setMessage(msg);
         };
 
         socket.on('update', updateHandler);
