@@ -72,6 +72,12 @@ io.on('connection', (socket) => {
         currentRoomId = roomId;
         socket.join(roomId);
         socket.emit('roomCreated', { roomId, playerId });
+
+        const activeRooms = Object.entries(rooms)
+            .filter(([roomId, room]) => room.users.length > 0 && !room.gameEnded)
+            .map(([roomId, room]) => ({ roomId, users: room.users }));
+        io.emit('activeRooms', activeRooms);
+
         io.to(roomId).emit('updateUsers', rooms[roomId].users);
     });
 
@@ -91,6 +97,11 @@ io.on('connection', (socket) => {
         } else {
             room.users.push({ id: socket.id, playerId, username, ready: true, role: 'spectator' });
         }
+
+        const activeRooms = Object.entries(rooms)
+            .filter(([roomId, room]) => room.users.length > 0 && !room.gameEnded)
+            .map(([roomId, room]) => ({ roomId, users: room.users }));
+        io.emit('activeRooms', activeRooms);
 
         socket.join(roomId);
         io.to(roomId).emit('updateUsers', room.users);
@@ -150,6 +161,13 @@ io.on('connection', (socket) => {
                 users: room.users
             });
         }
+    });
+
+    socket.on('getActiveRooms', () => {
+        const activeRooms = Object.entries(rooms)
+            .filter(([roomId, room]) => room.users.length > 0 && !room.gameEnded)
+            .map(([roomId, room]) => ({ roomId, users: room.users }));
+        io.emit('activeRooms', activeRooms);
     });
 
     socket.on('disconnect', () => {
