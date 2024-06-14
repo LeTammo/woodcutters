@@ -108,7 +108,7 @@ function Game({ roomId, playerId, username }) {
 
     return (
         <div className="align-items-center g-lg-5 py-5">
-            <div className="row p-4 p-md-5 border rounded-3 bg-body-tertiary">
+            <div className="row p-4 p-md-5 border rounded-3 bg-body-tertiary bg-opacity-92">
                 <div className="col-12 col-sm-6 col-md-4">
                     <GameControls
                         gameStarted={gameStarted}

@@ -40,7 +40,7 @@ function Home({ playerId, username }) {
     return (
         <div className="row align-items-center g-lg-5 py-5">
             <div className="mx-auto col-sm-12 col-md-10 col-lg-8">
-                <div className="p-4 p-md-5 border rounded-3 bg-body-tertiary">
+                <div className="p-4 p-md-5 border rounded-3 bg-body-tertiary bg-opacity-92">
                     <h5 className="text-center mb-5">Hallo {username}!</h5>
                     <div>
                         <button className="btn btn-success" onClick={createRoom}>Raum erstellen</button>
