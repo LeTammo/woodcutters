@@ -11,7 +11,6 @@ function App() {
         if (username.trim() !== '') {
             sessionStorage.setItem('username', username);
             setUsername(username);
-            socket.emit('createRoom', username);
         }
     };
 
