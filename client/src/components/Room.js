@@ -2,11 +2,11 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import Game from './Game';
 
-function Room() {
+function Room({ playerId, username }) {
     const { roomId } = useParams();
 
     return (
-        <Game roomId={roomId} username={sessionStorage.getItem('username')} />
+        <Game roomId={roomId} playerId={playerId} username={username} />
     );
 }
 

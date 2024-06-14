@@ -5,7 +5,7 @@ import RoundHistory from './RoundHistory';
 import Chat from './Chat';
 import GameControls from './GameControls';
 
-function Game({ roomId, username }) {
+function Game({ roomId, playerId, username }) {
     const [trees, setTrees] = useState(100);
     const [round, setRound] = useState(0);
     const [order, setOrder] = useState(0);
@@ -20,7 +20,6 @@ function Game({ roomId, username }) {
     const [role, setRole] = useState('player');
 
     useEffect(() => {
-        const playerId = sessionStorage.getItem('playerId');
         socket.emit('joinRoom', { roomId, username, playerId });
         socket.emit('requestGameState', { roomId, playerId });
 
@@ -92,12 +91,11 @@ function Game({ roomId, username }) {
             socket.off('gameStarted', gameStartedHandler);
             socket.off('end', endHandler);
         };
-    }, [roomId, username]);
+    }, [roomId, playerId, username]);
 
     const placeOrder = () => {
         if (!gameEnded && role === 'player') {
             const numTrees = parseInt(order);
-            const playerId = sessionStorage.getItem('playerId');
             socket.emit('order', { numTrees, playerId });
             setHasOrdered(true);
         }
@@ -126,7 +124,7 @@ function Game({ roomId, username }) {
                         message={message}
                     />
                     <div className="mt-3">
-                        <Chat users={connectedUsers} />
+                        <Chat users={connectedUsers} playerId={playerId} />
                     </div>
                 </div>
                 <div className="col-12 col-sm-6 col-md-8">

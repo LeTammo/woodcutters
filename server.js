@@ -39,7 +39,7 @@ const maxRounds = 5;
 app.use(express.static('client/build'));
 
 let rooms = {};
-//const users = {};
+const users = {};
 
 app.get('/session/:sessionId', (req, res) => {
     const sessionId = req.params.sessionId;
@@ -55,9 +55,16 @@ app.get('/session/:sessionId', (req, res) => {
 io.on('connection', (socket) => {
     let currentRoomId = null;
 
-    socket.on('createRoom', (username) => {
+    socket.on('requestPlayerId', () => {
+        socket.emit('playerId', nanoid());
+    });
+
+    socket.on('registerUser', ({ playerId, username }) => {
+        users[socket.id] = { playerId, username };
+    });
+
+    socket.on('createRoom', (playerId, username) => {
         const roomId = nanoid();
-        const playerId = nanoid();
 
         rooms[roomId] = {
             trees: maxTrees,
@@ -71,7 +78,7 @@ io.on('connection', (socket) => {
 
         currentRoomId = roomId;
         socket.join(roomId);
-        socket.emit('roomCreated', { roomId, playerId });
+        socket.emit('roomCreated', roomId);
 
         const activeRooms = Object.entries(rooms)
             .filter(([roomId, room]) => room.users.length > 0 && !room.gameEnded)

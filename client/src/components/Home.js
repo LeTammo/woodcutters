@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { socket } from '../socket';
 
-function Home() {
+function Home({ playerId, username }) {
     const [activeRooms, setActiveRooms] = useState([]);
     const [roomId, setRoomId] = useState('');
     const navigate = useNavigate();
@@ -25,8 +25,8 @@ function Home() {
     }, []);
 
     const createRoom = () => {
-        socket.emit('createRoom', sessionStorage.getItem('username'));
-        socket.on('roomCreated', ({ roomId, playerId }) => {
+        socket.emit('createRoom', playerId, username);
+        socket.on('roomCreated', (roomId) => {
             navigate(`/${roomId}`);
         });
     };
@@ -41,7 +41,7 @@ function Home() {
         <div className="row align-items-center g-lg-5 py-5">
             <div className="mx-auto col-sm-12 col-md-10 col-lg-8">
                 <div className="p-4 p-md-5 border rounded-3 bg-body-tertiary">
-                    <h5 className="text-center mb-5">Hallo {sessionStorage.getItem('username')}!</h5>
+                    <h5 className="text-center mb-5">Hallo {username}!</h5>
                     <div>
                         <button className="btn btn-success" onClick={createRoom}>Raum erstellen</button>
                     </div>
@@ -59,7 +59,8 @@ function Home() {
                                         ))}
                                     </div>
                                     <button className="btn btn-sm btn-primary"
-                                            onClick={() => navigate(`/${room.roomId}`)}>Beitreten
+                                            onClick={() => navigate(`/${room.roomId}`)}>
+                                        Beitreten
                                     </button>
                                 </div>
                             ))}

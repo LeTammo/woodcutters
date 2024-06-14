@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { socket } from '../socket';
 
-function Chat({ users }) {
+function Chat({ users, playerId }) {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const chatContainerRef = useRef(null);
 
     useEffect(() => {
         const handleReceiveMessage = ({ username, message }) => {
-            console.log(username, message)
             setMessages(prevMessages => [...prevMessages, { username, message }]);
         };
 
@@ -31,7 +30,6 @@ function Chat({ users }) {
 
     const handleSendMessage = () => {
         if (message.trim() !== '') {
-            const playerId = sessionStorage.getItem('playerId');
             socket.emit('sendMessage', { playerId, message });
             setMessage('');
         }
