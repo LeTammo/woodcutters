@@ -1,8 +1,10 @@
-game.db
+# server
+server/node_modules
+server/db/*.sqlite
 
-/node_modules
+# client
+client/node_modules
+client/build
 
-/client/node_modules
-/client/build
-
+# env and other files
 .idea
