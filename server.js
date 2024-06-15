@@ -4,13 +4,14 @@ const { Server } = require('socket.io');
 const { customAlphabet } = require('nanoid');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
 const db = new sqlite3.Database('./game.db');
-const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvw', 7)
+const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvw', 7);
 
 db.serialize(() => {
     db.run(`CREATE TABLE IF NOT EXISTS sessions (
@@ -32,14 +33,22 @@ db.serialize(() => {
   )`);
 });
 
+let rooms = {};
+let users = {};
+
 const maxTrees = 100;
 const minGrowth = 1;
 const maxRounds = 5;
 
 app.use(express.static('client/build'));
 
-let rooms = {};
-const users = {};
+app.use((req, res, next) => {
+    const indexPath = path.join(__dirname, 'client/build', 'index.html');
+    if (!fs.existsSync(indexPath)) {
+        return res.sendFile(path.join(__dirname, 'client/public', 'updating.html'));
+    }
+    next();
+});
 
 app.get('/session/:sessionId', (req, res) => {
     const sessionId = req.params.sessionId;
