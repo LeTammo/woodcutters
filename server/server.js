@@ -8,7 +8,7 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 const routes = require('./routes');
-const socketHandlers = require('./socketHandlers');
+const socketHandlers = require('./socket');
 
 app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(routes);
