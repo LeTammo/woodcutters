@@ -27,7 +27,7 @@ function RoundHistory({ roundHistory, users, orderStatus, gameRunning }) {
                 users.filter(user => user.role === 'player').map((user, index) => (
                     <div key={index} className="list-group-item">
                         {user.username} {
-                        orderStatus[user.username]
+                        orderStatus[user.playerId]
                             ? <span>hat bestellt!</span>
                             : <span className="text-secondary">denkt nach...</span>
                     }

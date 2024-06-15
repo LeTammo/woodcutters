@@ -53,8 +53,8 @@ function Game({ roomId, playerId, username }) {
             }
         };
 
-        const orderStatusHandler = (status) => {
-            setOrderStatus(status);
+        const playerOrderedHandler = (playerId) => {
+            setOrderStatus(prevStatus => ({...prevStatus, [playerId]: true}));
         };
 
         const roundHistoryHandler = (history) => {
@@ -74,7 +74,7 @@ function Game({ roomId, playerId, username }) {
         socket.on('gameState', gameStateHandler);
         socket.on('result', resultHandler);
         socket.on('updateUsers', updateUsersHandler);
-        socket.on('orderStatus', orderStatusHandler);
+        socket.on('playerOrdered', playerOrderedHandler);
         socket.on('roundHistory', roundHistoryHandler);
         socket.on('gameStarted', gameStartedHandler);
         socket.on('end', endHandler);
@@ -84,7 +84,7 @@ function Game({ roomId, playerId, username }) {
             socket.off('gameState', gameStateHandler);
             socket.off('result', resultHandler);
             socket.off('updateUsers', updateUsersHandler);
-            socket.off('orderStatus', orderStatusHandler);
+            socket.off('playerOrdered', playerOrderedHandler);
             socket.off('roundHistory', roundHistoryHandler);
             socket.off('gameStarted', gameStartedHandler);
             socket.off('end', endHandler);
@@ -100,7 +100,7 @@ function Game({ roomId, playerId, username }) {
     };
 
     const handleReady = () => {
-        socket.emit('setReady');
+        socket.emit('setReady', playerId);
         setIsReady(true);
     };
 

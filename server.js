@@ -114,11 +114,11 @@ io.on('connection', (socket) => {
         io.to(roomId).emit('updateUsers', room.users);
     });
 
-    socket.on('setReady', () => {
+    socket.on('setReady', (playerId) => {
         if (!currentRoomId || !rooms[currentRoomId]) return;
 
         const room = rooms[currentRoomId];
-        const user = room.users.find(user => user.id === socket.id);
+        const user = room.users.find(user => user.playerId === playerId);
         if (user) {
             user.ready = true;
             io.to(currentRoomId).emit('updateUsers', room.users);
@@ -134,12 +134,12 @@ io.on('connection', (socket) => {
         if (!currentRoomId || !rooms[currentRoomId] || rooms[currentRoomId].gameEnded) return;
 
         const room = rooms[currentRoomId];
-        room.orders.push({ playerId, numTrees });
+        room.orders[playerId] = numTrees;
         const user = room.users.find(user => user.playerId === playerId);
         if (user) {
-            io.to(currentRoomId).emit('orderStatus', { [user.username]: true });
+            io.to(currentRoomId).emit('playerOrdered', playerId);
         }
-        if (room.orders.length === room.users.filter(user => user.role === 'player').length) {
+        if (Object.keys(room.orders).length === room.users.filter(user => user.role === 'player').length) {
             processOrders(currentRoomId);
         }
     });
@@ -208,18 +208,19 @@ function processOrders(roomId) {
         orderSequence: []
     };
 
-    room.orders.forEach(order => {
-        const user = room.users.find(user => user.playerId === order.playerId);
+    Object.keys(room.orders).forEach(playerId => {
+        const orderedTrees = room.orders[playerId];
+        const user = room.users.find(user => user.playerId === playerId);
         roundDetails.orderSequence.push(user.username);
 
-        if (room.trees >= order.numTrees) {
-            room.trees -= order.numTrees;
-            totalFelled += order.numTrees;
-            roundDetails.orders.push({ username: user.username, ordered: order.numTrees, received: order.numTrees });
+        if (room.trees >= orderedTrees) {
+            room.trees -= orderedTrees;
+            totalFelled += orderedTrees;
+            roundDetails.orders.push({ username: user.username, ordered: orderedTrees, received: orderedTrees });
         } else {
-            roundDetails.orders.push({ username: user.username, ordered: order.numTrees, received: 0 });
+            roundDetails.orders.push({ username: user.username, ordered: orderedTrees, received: 0 });
         }
-        totalOrdered += order.numTrees;
+        totalOrdered += orderedTrees;
     });
 
     roundDetails.totalOrdered = totalOrdered;
