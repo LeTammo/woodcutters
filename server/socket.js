@@ -55,12 +55,9 @@ function initialize(io) {
             }
 
             const room = rooms[roomId];
-            if (room.users.some(user => user.username === username && user.playerId === playerId)) {
-                // everything is fine
-            } else if (!room.gameStarted) {
-                room.users.push({ id: socket.id, playerId, username, ready: false, role: 'player' });
-            } else {
-                room.users.push({ id: socket.id, playerId, username, ready: true, role: 'spectator' });
+            if (!room.users.some(user => user.username === username && user.playerId === playerId)) {
+                const role = room.gameStarted ? 'spectator' : 'player';
+                room.users.push({ id: socket.id, playerId, username, ready: false, role });
             }
 
             io.emit('activeRooms', getActiveRooms());
