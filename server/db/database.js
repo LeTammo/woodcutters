@@ -25,6 +25,15 @@ function initialize() {
     });
 }
 
-initialize();
+function insertRound(sessionId, round, orders, totalOrdered, totalFelled, remainingTrees, newGrowth, orderSequence, callback) {
+    db.run(
+        "INSERT INTO rounds (session_id, round, orders, total_ordered, total_felled, remaining_trees, new_growth, order_sequence) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        [sessionId, round, orders, totalOrdered, totalFelled, remainingTrees, newGrowth, orderSequence],
+        callback
+    );
+}
 
-module.exports = db;
+module.exports = {
+    initialize,
+    insertRound
+};

@@ -200,8 +200,9 @@ function processOrders(io, roomId) {
     io.to(roomId).emit('update', { trees: room.trees, round: room.currentRound });
     io.to(roomId).emit('roundHistory', room.roundHistory);
 
-    db.run("INSERT INTO rounds (session_id, round, orders, total_ordered, total_felled, remaining_trees, new_growth, order_sequence) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-        [roomId, room.currentRound, JSON.stringify(roundDetails.orders), totalOrdered, totalFelled, roundDetails.remainingTrees, roundDetails.newGrowth, roundDetails.orderSequence.join(', ')]);
+    db.insertRound(roomId, room.currentRound, JSON.stringify(roundDetails.orders), totalOrdered, totalFelled, roundDetails.remainingTrees, roundDetails.newGrowth, roundDetails.orderSequence.join(', '), (err) => {
+        if (err) console.error(err);
+    });
 
     if (room.trees <= 0) {
         room.gameEnded = true;
