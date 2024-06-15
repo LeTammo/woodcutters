@@ -149,7 +149,7 @@ function initialize(io) {
 function getActiveRooms() {
     return Object.entries(rooms)
         .filter(([, room]) => room.users.length > 0 && !room.gameEnded)
-        .map(([roomId, room]) => ({ roomId, users: room.users }));
+        .map(([roomId, room]) => ({ roomId, users: room.users, round: room.currentRound}));
 }
 
 function processOrders(io, roomId) {

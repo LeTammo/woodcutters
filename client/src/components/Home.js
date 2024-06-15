@@ -48,19 +48,23 @@ function Home({ playerId, username }) {
                         <div className="mt-5">
                             <h5>Aktive Lobbies</h5>
                             {activeRooms.map(room => (
-                                <div key={room.roomId}
-                                     className="p-2 mb-1 text-start bg-dark border rounded list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
+                                <div key={room.roomId} className="row p-2 px-0 mb-1 text-start bg-dark border rounded">
+                                    <div className="col-4 m-auto text-start">
+                                        {room.round === 0 ? 'Warten in Lobby' : `Runde ${room.round}`}
+                                    </div>
+                                    <div className="col-4 m-auto">
                                         {room.users.map((user, index) => (
                                             <span key={user.playerId}>
                                         {user.username}{index < room.users.length - 1 ? ', ' : ''}
                                     </span>
                                         ))}
                                     </div>
-                                    <button className="btn btn-sm btn-primary"
-                                            onClick={() => navigate(`/${room.roomId}`)}>
-                                        Beitreten
-                                    </button>
+                                    <div className="col-4 text-end">
+                                        <button className="btn btn-sm btn-primary"
+                                                onClick={() => navigate(`/${room.roomId}`)}>
+                                            Beitreten
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>
