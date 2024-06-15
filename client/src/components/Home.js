@@ -11,7 +11,6 @@ function Home({ playerId, username }) {
         socket.emit('getActiveRooms');
 
         socket.on('activeRooms', rooms => {
-            console.log(rooms);
             if (Array.isArray(rooms)) {
                 setActiveRooms(rooms);
             } else {

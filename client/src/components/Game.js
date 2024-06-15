@@ -24,7 +24,6 @@ function Game({ roomId, playerId, username }) {
         socket.emit('requestGameState', { roomId, playerId });
 
         const updateHandler = (data) => {
-            console.log(data)
             setTrees(data.trees);
             setRound(data.round);
             setHasOrdered(false);
@@ -59,7 +58,6 @@ function Game({ roomId, playerId, username }) {
         };
 
         const roundHistoryHandler = (history) => {
-            console.log(history)
             setRoundHistory(history);
         };
 
