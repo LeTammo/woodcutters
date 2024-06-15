@@ -16,10 +16,16 @@
       body {
         background:
                 linear-gradient(rgba(33, 37, 41, 0.5), rgba(33, 37, 41, 0.5)),
-                url("/background.png") bottom no-repeat;
+                url("/background.png") bottom center no-repeat;
         min-height: 100vh;
         background-size: 100% auto;
       }
+      @media (max-width: 1600px) { body {background-size: 120%;} }
+      @media (max-width: 1400px) { body {background-size: 140%;} }
+      @media (max-width: 1200px) { body {background-size: 160%;} }
+      @media (max-width: 992px) { body {background-size: 200%;} }
+      @media (max-width: 768px) { body {background-size: 260%;} }
+      @media (max-width: 576px) { body {background-size: 320%;} }
     </style>
   </head>
   <body class="text-center">
