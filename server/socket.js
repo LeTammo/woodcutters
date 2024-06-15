@@ -38,11 +38,7 @@ function initialize(io) {
             socket.join(roomId);
             socket.emit('roomCreated', roomId);
 
-            const activeRooms = Object.entries(rooms)
-                .filter(([roomId, room]) => room.users.length > 0 && !room.gameEnded)
-                .map(([roomId, room]) => ({ roomId, users: room.users }));
-
-            io.emit('activeRooms', activeRooms);
+            io.emit('activeRooms', getActiveRooms());
             io.to(roomId).emit('updateUsers', rooms[roomId].users);
         });
 
@@ -152,7 +148,7 @@ function initialize(io) {
 
 function getActiveRooms() {
     return Object.entries(rooms)
-        .filter(([roomId, room]) => room.users.length > 0 && !room.gameEnded)
+        .filter(([, room]) => room.users.length > 0 && !room.gameEnded)
         .map(([roomId, room]) => ({ roomId, users: room.users }));
 }
 
