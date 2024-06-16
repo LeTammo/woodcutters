@@ -150,6 +150,10 @@ function Game({ roomId, playerId, username }) {
                                     users={connectedUsers}
                                     orderStatus={orderStatus}
                                     gameRunning={gameStarted && !gameEnded}
+                                    gameEnded={gameEnded}
+                                    trees={trees}
+                                    order={order}
+                                    message={message}
                                 />
                                 <GameControls
                                     gameStarted={gameStarted}

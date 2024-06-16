@@ -188,7 +188,6 @@ function processOrders(io, roomId) {
         roundDetails.orderSequence.push(user.username);
 
         let pointsSum = 0;
-        console.log(room.roundHistory)
         room.roundHistory.forEach((round) => {
             round.orders.forEach((order) => {
                 if (order.username === user.username) {

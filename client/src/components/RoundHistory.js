@@ -1,10 +1,10 @@
 import React from 'react';
 
-function RoundHistory({ roundHistory, users, orderStatus, gameRunning }) {
+function RoundHistory({ roundHistory, users, orderStatus, gameRunning, gameEnded, trees, order, message }) {
     return (
-        <div>
+        <div className="row justify-content-center">
             {roundHistory.map((round, roundIndex) => (
-                <div key={roundIndex} className="mb-4">
+                <div key={roundIndex} className="col-6 mb-4">
                     <h4 className="fw-bold">Runde {round.round}</h4>
                     <div className="mt-2 fst-italic">Bestellungen:</div>
                     <div className="mb-2">
@@ -20,7 +20,9 @@ function RoundHistory({ roundHistory, users, orderStatus, gameRunning }) {
                     </div>
                     <div><span className="text-danger-emphasis">{round.totalFelled} Bäume</span> werden gerodet.</div>
                     <div>Es bleiben {round.remainingTrees} Bäume übrig und es wachsen {round.newGrowth} nach.</div>
-                    <div>Der Wald hat nun <span className="text-success-emphasis">{round.remainingTrees + round.newGrowth} Bäume</span>.</div>
+                    <div>Der Wald hat nun <span
+                        className="text-success-emphasis">{round.remainingTrees + round.newGrowth} Bäume</span>.
+                    </div>
                 </div>
             ))}
             {gameRunning && (
@@ -33,6 +35,13 @@ function RoundHistory({ roundHistory, users, orderStatus, gameRunning }) {
                     }
                     </div>
                 ))
+            )}
+            {gameEnded && (
+                <div className="col-6 my-auto">
+                    <p className="mb-1 text-primary-emphasis">Keine Bestellungen mehr möglich.</p>
+                    <p className="mb-1 text-success-emphasis">Bäume im Wald: {trees}</p>
+                    {message && <p className="text-info-emphasis mt-3">{message}</p>}
+                </div>
             )}
         </div>
     );

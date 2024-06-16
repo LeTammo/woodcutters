@@ -6,10 +6,10 @@ const GameControls = (
     return (
         <div className="game-controls row justify-content-center">
             <div className="col-12 col-lg-6">
-                {gameStarted && <p>Bäume im Wald: {trees}</p>}
+                {gameStarted && !gameEnded && <p>Bäume im Wald: {trees}</p>}
                 {!gameStarted ? (
                     ""
-                ) : !hasOrdered && !gameEnded && role === 'player' ? (
+                ) : !hasOrdered && !gameEnded && role === 'player' && (
                     <div className="input-group mb-3">
                         <label htmlFor="treeOrder" className="form-label d-none">Anzahl der Bäume:</label>
                         <input
@@ -24,12 +24,8 @@ const GameControls = (
                         />
                         <button className="btn btn-dark" onClick={placeOrder}>Bestellen</button>
                     </div>
-                ) : gameEnded ? (
-                    <p>Keine Bestellungen mehr möglich.</p>
-                ) : (
-                    <p>Du hast {order} Bäume bestellt</p>
                 )}
-                {message && <p className="text-info-emphasis mt-3">{message}</p>}
+                {!gameEnded && message && <p className="text-info-emphasis mt-3">{message}</p>}
             </div>
         </div>
     );
