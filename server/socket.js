@@ -62,6 +62,9 @@ function initialize(io) {
             const user = room.users.find(user => user.playerId === playerId);
             if (user) user.online = true;
             if (user) user.socketId = socket.id;
+            io.to(currentRoomId).emit('receiveMessage',
+                { username: 'Server', message: `${user.username} connected`, isSystem: true, color: 'success-emphasis' }
+            );
 
             io.to(roomId).emit('updateUsers', room.users);
             io.emit('activeRooms', getActiveRooms());
@@ -111,7 +114,7 @@ function initialize(io) {
             if (!user)
                 return;
 
-            io.to(currentRoomId).emit('receiveMessage', { username: user.username, message });
+            io.to(currentRoomId).emit('receiveMessage', { username: user.username, message, isSystem: false, color: '' });
         });
 
         socket.on('requestGameState', ({ roomId, playerId }) => {
@@ -145,6 +148,9 @@ function initialize(io) {
 
             const user = rooms[currentRoomId].users.find(user => user.socketId === socket.id);
             if (user) user.online = false;
+            io.to(currentRoomId).emit('receiveMessage',
+                { username: 'Server', message: `${user.username} disconnected`, isSystem: true, color: 'danger-emphasis' }
+            );
             io.to(currentRoomId).emit('updateUsers', rooms[currentRoomId].users);
         });
     });

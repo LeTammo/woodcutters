@@ -7,8 +7,8 @@ function Chat({ users, playerId }) {
     const chatContainerRef = useRef(null);
 
     useEffect(() => {
-        const handleReceiveMessage = ({ username, message }) => {
-            setMessages(prevMessages => [...prevMessages, { username, message }]);
+        const handleReceiveMessage = ({ username, message, isSystem, color }) => {
+            setMessages(prevMessages => [...prevMessages, { username, message, isSystem, color }]);
         };
 
         socket.on('receiveMessage', handleReceiveMessage);
@@ -55,7 +55,10 @@ function Chat({ users, playerId }) {
             <div ref={chatContainerRef} className="flex-grow-1 overflow-auto p-3 pb-1 hide-scrollbar" style={{ minHeight: '0px' }}>
                 {messages.map((msg, index) => (
                     <div className="text-start" key={index}>
-                        <strong className="text-primary-emphasis">{msg.username}:</strong> {msg.message}
+                        {msg.isSystem
+                            ? <span className={`fst-italic text-${msg.color}`}>{msg.message}</span>
+                            : <span><strong className="text-primary-emphasis">{msg.username}:</strong> {msg.message}</span>
+                        }
                     </div>
                 ))}
                 <div />
