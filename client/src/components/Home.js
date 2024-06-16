@@ -4,7 +4,6 @@ import { socket } from '../socket';
 
 function Home({ playerId, username }) {
     const [activeRooms, setActiveRooms] = useState([]);
-    const [roomId, setRoomId] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -30,12 +29,6 @@ function Home({ playerId, username }) {
         });
     };
 
-    const joinRoom = () => {
-        if (roomId.trim() !== '') {
-            navigate(`/${roomId}`);
-        }
-    };
-
     return (
         <div className="row align-items-center g-lg-5 py-5">
             <div className="mx-auto col-sm-12 col-md-10 col-lg-8">
@@ -53,7 +46,7 @@ function Home({ playerId, username }) {
                                         {!room.gameStarted ? 'Warten in Lobby' : `Runde ${room.round + 1}`}
                                     </div>
                                     <div className="col-4 m-auto">
-                                        {room.users.map((user, index) => (
+                                        {room.users.map((user) => (
                                             <span className={`px-1 ${!user.online && 'text-secondary'}`} key={user.playerId}>
                                                 {user.username}
                                             </span>

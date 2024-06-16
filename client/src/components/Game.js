@@ -7,7 +7,6 @@ import GameControls from './GameControls';
 
 function Game({ roomId, playerId, username }) {
     const [trees, setTrees] = useState(100);
-    const [round, setRound] = useState(0);
     const [order, setOrder] = useState(0);
     const [message, setMessage] = useState('');
     const [connectedUsers, setConnectedUsers] = useState([]);
@@ -25,14 +24,12 @@ function Game({ roomId, playerId, username }) {
 
         const updateHandler = (data) => {
             setTrees(data.trees);
-            setRound(data.round);
             setHasOrdered(false);
             setOrderStatus({});
         };
 
         const gameStateHandler = (data) => {
             setTrees(data.trees);
-            setRound(data.round);
             setHasOrdered(false);
             setOrderStatus({});
             setRoundHistory(data.roundHistory);
