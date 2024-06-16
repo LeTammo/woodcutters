@@ -14,11 +14,12 @@ function initialize(io) {
         let currentRoomId = null;
 
         socket.on('requestPlayerId', () => {
-            socket.emit('playerId', nanoid());
+            const playerId = nanoid();
+            socket.emit('playerId', playerId);
         });
 
         socket.on('registerUser', ({ playerId, username }) => {
-            users[socket.id] = { playerId, username };
+            users[playerId] = { socketId: socket.id, username };
         });
 
         socket.on('createRoom', (playerId, username) => {
@@ -27,7 +28,7 @@ function initialize(io) {
             rooms[roomId] = {
                 trees: maxTrees,
                 currentRound: 0,
-                users: [{ id: socket.id, playerId, username, online: true, ready: false, role: 'player' }],
+                users: [{ socketId: socket.id, playerId, username, online: true, ready: false, role: 'player' }],
                 orders: [],
                 roundHistory: [],
                 gameStarted: false,
@@ -38,8 +39,8 @@ function initialize(io) {
             socket.join(roomId);
             socket.emit('roomCreated', roomId);
 
-            io.emit('activeRooms', getActiveRooms());
             io.to(roomId).emit('updateUsers', rooms[roomId].users);
+            io.emit('activeRooms', getActiveRooms());
         });
 
         socket.on('joinRoom', ({ roomId, username, playerId }) => {
@@ -53,13 +54,17 @@ function initialize(io) {
             const room = rooms[roomId];
             if (!room.users.some(user => user.username === username && user.playerId === playerId)) {
                 const role = room.gameStarted ? 'spectator' : 'player';
-                room.users.push({ id: socket.id, playerId, username, ready: false, role });
+                room.users.push({ socketId: socket.id, playerId, username, online: true, ready: false, role });
             }
 
-            io.emit('activeRooms', getActiveRooms());
-
             socket.join(roomId);
+
+            const user = room.users.find(user => user.playerId === playerId);
+            if (user) user.online = true;
+            if (user) user.socketId = socket.id;
+
             io.to(roomId).emit('updateUsers', room.users);
+            io.emit('activeRooms', getActiveRooms());
         });
 
         socket.on('setReady', (playerId) => {
@@ -78,6 +83,7 @@ function initialize(io) {
             if (room.users.every(user => user.ready || user.role === 'spectator')) {
                 room.gameStarted = true;
                 io.to(currentRoomId).emit('gameStarted');
+                io.emit('activeRooms', getActiveRooms());
             }
         });
 
@@ -96,6 +102,7 @@ function initialize(io) {
 
             if (Object.keys(room.orders).length === room.users.filter(user => user.role === 'player').length) {
                 processOrders(io, currentRoomId);
+                io.emit('activeRooms', getActiveRooms());
             }
         });
 
@@ -136,11 +143,8 @@ function initialize(io) {
             if (!currentRoomId || !rooms[currentRoomId])
                 return;
 
-            const user = rooms[currentRoomId].users.find(user => user.id === socket.id);
-            if (!user)
-                return;
-
-            user.online = false;
+            const user = rooms[currentRoomId].users.find(user => user.socketId === socket.id);
+            if (user) user.online = false;
             io.to(currentRoomId).emit('updateUsers', rooms[currentRoomId].users);
         });
     });
@@ -149,7 +153,8 @@ function initialize(io) {
 function getActiveRooms() {
     return Object.entries(rooms)
         .filter(([, room]) => room.users.length > 0 && !room.gameEnded)
-        .map(([roomId, room]) => ({ roomId, users: room.users, round: room.currentRound}));
+        .map(([roomId, room]) =>
+            ({ roomId, users: room.users, round: room.currentRound, gameStarted: room.gameStarted}));
 }
 
 function processOrders(io, roomId) {

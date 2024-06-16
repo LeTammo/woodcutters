@@ -47,7 +47,8 @@ function Chat({ users, playerId }) {
             <div className="d-flex flex-wrap p-2">
                 {users.map((user, index) => (
                     <div key={index} className="shadow px-2 py-1 m-2 border border-dark border-2 rounded">
-                        {user.username} {user.role !== 'player' && '(👀)'}
+                        <span className={user.online ? 'text-success' : 'text-danger'}>⦿</span>
+                        &nbsp;{user.username} {user.role !== 'player' && '(👀)'}
                     </div>
                 ))}
             </div>

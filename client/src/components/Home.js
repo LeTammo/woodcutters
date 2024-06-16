@@ -50,13 +50,13 @@ function Home({ playerId, username }) {
                             {activeRooms.map(room => (
                                 <div key={room.roomId} className="row p-2 px-0 mb-1 text-start bg-dark border rounded">
                                     <div className="col-4 m-auto text-start">
-                                        {room.round === 0 ? 'Warten in Lobby' : `Runde ${room.round}`}
+                                        {!room.gameStarted ? 'Warten in Lobby' : `Runde ${room.round + 1}`}
                                     </div>
                                     <div className="col-4 m-auto">
                                         {room.users.map((user, index) => (
-                                            <span key={user.playerId}>
-                                        {user.username}{index < room.users.length - 1 ? ', ' : ''}
-                                    </span>
+                                            <span className={`px-1 ${!user.online && 'text-secondary'}`} key={user.playerId}>
+                                                {user.username}
+                                            </span>
                                         ))}
                                     </div>
                                     <div className="col-4 text-end">
