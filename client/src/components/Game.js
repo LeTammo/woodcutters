@@ -30,12 +30,15 @@ function Game({ roomId, playerId, username }) {
 
         const gameStateHandler = (data) => {
             setTrees(data.trees);
-            setHasOrdered(false);
-            setOrderStatus({});
             setRoundHistory(data.roundHistory);
             setGameStarted(data.gameStarted);
             setGameEnded(data.gameEnded);
             setConnectedUsers(data.users);
+            if (data.order !== undefined) {
+                setOrder(data.order);
+                setHasOrdered(true);
+                setOrderStatus(prevStatus => ({...prevStatus, [playerId]: true}));
+            }
         };
 
         const resultHandler = (msg) => {

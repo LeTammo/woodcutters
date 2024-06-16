@@ -131,6 +131,7 @@ function initialize(io) {
                 trees: room.trees,
                 round: room.currentRound,
                 orders: room.orders,
+                order: room.orders[playerId],
                 roundHistory: room.roundHistory,
                 gameStarted: room.gameStarted,
                 gameEnded: room.gameEnded,
