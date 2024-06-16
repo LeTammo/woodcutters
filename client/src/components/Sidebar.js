@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { socket } from '../socket';
+import roundHistory from "./RoundHistory";
 
-function Chat({ users, playerId }) {
+function Sidebar({ users, playerId, roundHistory }) {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const chatContainerRef = useRef(null);
@@ -42,19 +43,44 @@ function Chat({ users, playerId }) {
     };
 
     return (
-        <div className="shadow-lg rounded border border-1 border-dark d-flex flex-column" style={{height: '500px'}}>
-            <div className="fw-bold p-3 border-bottom border-1 shadow border-dark">Chat</div>
-            <div className="d-flex flex-wrap p-2">
-                {users.map((user, index) => (
-                    <div key={index} className="shadow px-2 py-1 m-2 border border-dark border-2 rounded">
-                        <span className={user.online ? 'text-success' : 'text-danger'}>⦿</span>
-                        &nbsp;{user.username} {user.role !== 'player' && '(👀)'}
+        <div className="shadow-lg rounded border border-1 border-dark d-flex flex-column text-start">
+            {users
+                .sort((a, b) => {
+                    const aIsPlayer = a.role === 'player';
+                    const bIsPlayer = b.role === 'player';
+
+                    if (aIsPlayer && bIsPlayer) {
+                        const aPoints = roundHistory[roundHistory.length - 1]?.points.find(p => p.playerId === a.playerId)?.points || 0;
+                        const bPoints = roundHistory[roundHistory.length - 1]?.points.find(p => p.playerId === b.playerId)?.points || 0;
+                        return bPoints - aPoints;
+                    }
+
+                    if (aIsPlayer && !bIsPlayer) return -1;
+                    if (!aIsPlayer && bIsPlayer) return 1;
+
+                    return 0;
+                })
+                .map((user, index) => (
+                    <div key={index} className="shadow px-3 mt-2 rounded">
+                        <div className="d-flex justify-content-between">
+                            <div>
+                                <span className={user.online ? 'text-success' : 'text-danger'}>⦿</span>
+                                &nbsp;{user.username} {user.role === 'spectator' && '(👀)'}
+                            </div>
+                            <div>
+                                {user.role === 'player' && roundHistory[roundHistory.length - 1] &&
+                                    roundHistory[roundHistory.length - 1].points
+                                        .find(p => p.playerId === user.playerId)?.points
+                                    + " Punkte"
+                                }
+                            </div>
+                        </div>
                     </div>
                 ))}
-            </div>
-            <div ref={chatContainerRef} className="flex-grow-1 overflow-auto p-3 pb-1 hide-scrollbar" style={{ minHeight: '0px' }}>
+            <div ref={chatContainerRef} className="flex-grow-1 overflow-auto p-3 pb-1 hide-scrollbar"
+                 style={{height: '400px'}}>
                 {messages.map((msg, index) => (
-                    <div className="text-start" key={index}>
+                    <div key={index}>
                         {msg.isSystem
                             ? <span className={`fst-italic text-${msg.color}`}>{msg.message}</span>
                             : <span><strong className="text-primary-emphasis">{msg.username}:</strong> {msg.message}</span>
@@ -78,4 +104,4 @@ function Chat({ users, playerId }) {
     );
 }
 
-export default Chat;
+export default Sidebar;

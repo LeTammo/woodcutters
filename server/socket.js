@@ -178,7 +178,8 @@ function processOrders(io, roomId) {
         totalFelled: 0,
         remainingTrees: room.trees,
         newGrowth: 0,
-        orderSequence: []
+        orderSequence: [],
+        points: []
     };
 
     Object.keys(room.orders).forEach(playerId => {
@@ -186,12 +187,23 @@ function processOrders(io, roomId) {
         const user = room.users.find(user => user.playerId === playerId);
         roundDetails.orderSequence.push(user.username);
 
+        let pointsSum = 0;
+        console.log(room.roundHistory)
+        room.roundHistory.forEach((round) => {
+            round.orders.forEach((order) => {
+                if (order.username === user.username) {
+                    pointsSum += order.received;
+                }
+            });
+        });
         if (room.trees >= orderedTrees) {
             room.trees -= orderedTrees;
             totalFelled += orderedTrees;
             roundDetails.orders.push({ username: user.username, ordered: orderedTrees, received: orderedTrees });
+            roundDetails.points.push({ playerId: playerId, points: pointsSum + orderedTrees });
         } else {
             roundDetails.orders.push({ username: user.username, ordered: orderedTrees, received: 0 });
+            roundDetails.points.push({ playerId: playerId, points: pointsSum });
         }
         totalOrdered += orderedTrees;
     });

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { socket } from '../socket';
 import ShareLink from './ShareLink';
 import RoundHistory from './RoundHistory';
-import Chat from './Chat';
+import Sidebar from './Sidebar';
 import GameControls from './GameControls';
 
 function Game({ roomId, playerId, username }) {
@@ -107,42 +107,28 @@ function Game({ roomId, playerId, username }) {
     return (
         <div className="align-items-center g-lg-5 py-5">
             <div className="row p-4 p-md-5 border rounded-3 bg-body-tertiary bg-opacity-92">
-                <div className="col-12 col-sm-6 col-md-4">
-                    <GameControls
-                        gameStarted={gameStarted}
-                        role={role}
-                        isReady={isReady}
-                        handleReady={handleReady}
-                        hasOrdered={hasOrdered}
-                        gameEnded={gameEnded}
-                        trees={trees}
-                        order={order}
-                        setOrder={setOrder}
-                        placeOrder={placeOrder}
-                        message={message}
-                    />
-                    <div className="mt-3">
-                        <Chat users={connectedUsers} playerId={playerId} />
-                    </div>
-                </div>
                 <div className="col-12 col-sm-6 col-md-8">
                     {!gameStarted
                         ? (
                             <div>
-                                <ShareLink />
-                                <button className={`btn ${isReady ? 'btn-secondary' : 'btn-success'} mt-3`} onClick={handleReady} disabled={isReady}>
+                                <ShareLink/>
+                                <button className={`btn ${isReady ? 'btn-secondary' : 'btn-success'} mt-3`}
+                                        onClick={handleReady} disabled={isReady}>
                                     {isReady ? 'Bereit' : 'Bereit'}
                                 </button>
                                 <div className="text-start p-5">
                                     <h4>Spielregeln</h4>
                                     <ul className="list-unstyled">
                                         <li className="pb-2">Der Wald hat maximal 100 Bäume.</li>
-                                        <li className="pb-2">Du bist Holzfäller und bestellst jede Runde eine Anzahl an Bäumen. Deine
+                                        <li className="pb-2">Du bist Holzfäller und bestellst jede Runde eine Anzahl an
+                                            Bäumen. Deine
                                             Mitspieler auch.
                                         </li>
-                                        <li className="pb-2">Die Försterei lost die Reihenfolge der Bestellungen aus und arbeitet sie ab.
+                                        <li className="pb-2">Die Försterei lost die Reihenfolge der Bestellungen aus und
+                                            arbeitet sie ab.
                                         </li>
-                                        <li className="pb-2">Sind nicht mehr genug Bäume für deine Bestellung übrig, gehst du leer aus.
+                                        <li className="pb-2">Sind nicht mehr genug Bäume für deine Bestellung übrig,
+                                            gehst du leer aus.
                                         </li>
                                         <li className="pb-2">Nach jeder Runde wachsen Bäume nach:</li>
                                         <ul className="pb-2">
@@ -158,14 +144,34 @@ function Game({ roomId, playerId, username }) {
                             </div>
                         )
                         : (
-                            <RoundHistory
-                                roundHistory={roundHistory}
-                                users={connectedUsers}
-                                orderStatus={orderStatus}
-                                gameRunning={gameStarted && !gameEnded}
-                            />
+                            <div>
+                                <RoundHistory
+                                    roundHistory={roundHistory}
+                                    users={connectedUsers}
+                                    orderStatus={orderStatus}
+                                    gameRunning={gameStarted && !gameEnded}
+                                />
+                                <GameControls
+                                    gameStarted={gameStarted}
+                                    role={role}
+                                    isReady={isReady}
+                                    handleReady={handleReady}
+                                    hasOrdered={hasOrdered}
+                                    gameEnded={gameEnded}
+                                    trees={trees}
+                                    order={order}
+                                    setOrder={setOrder}
+                                    placeOrder={placeOrder}
+                                    message={message}
+                                />
+                            </div>
                         )
                     }
+                </div>
+                <div className="col-12 col-sm-6 col-md-4">
+                    <div className="mt-3">
+                        <Sidebar users={connectedUsers} playerId={playerId} roundHistory={roundHistory}/>
+                    </div>
                 </div>
             </div>
         </div>
