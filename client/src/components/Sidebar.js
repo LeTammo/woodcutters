@@ -64,7 +64,7 @@ function Sidebar({ users, playerId, roundHistory }) {
                     <div key={index} className="shadow px-3 mt-2 rounded">
                         <div className="d-flex justify-content-between">
                             <div>
-                                <span className={user.online ? 'text-success' : 'text-danger'}>⦿</span>
+                                <span className={user.online ? 'text-success-emphasis' : 'text-danger-emphasis'}>⦿</span>
                                 &nbsp;{user.username} {user.role === 'spectator' && '(👀)'}
                             </div>
                             <div>
