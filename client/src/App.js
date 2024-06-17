@@ -12,12 +12,12 @@ function App() {
     return (
         !username || !playerId
             ?
-            <RegisterUser playerId={playerId} setPlayerId={setPlayerId} username={username} setUsername={setUsername} />
+            <RegisterUser playerId={playerId} setPlayerId={setPlayerId} username={username} setUsername={setUsername}/>
             :
             <Router>
                 <Routes>
-                    <Route path="/" element={<Home playerId={playerId} username={username} />} />
-                    <Route path="/:roomId" element={<Game playerId={playerId} username={username} />} />
+                    <Route path="/" element={<Home playerId={playerId} username={username}/>}/>
+                    <Route path="/:roomId" element={<Game playerId={playerId} username={username}/>}/>
                 </Routes>
             </Router>
     );

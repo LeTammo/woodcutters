@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from "react-router-dom";
 import { socket } from '../socket';
 import ShareRoom from './ShareRoom';
-import RoundHistory from './RoundHistory';
-import Sidebar from './Sidebar';
-import GameControls from './GameControls';
-import { useParams } from "react-router-dom";
 import PrepareGame from "./PrepareGame";
+import Sidebar from './Sidebar';
 import Rules from "./Rules";
+import GameControls from './GameControls';
+import RoundHistory from './RoundHistory';
 
 function Game({ playerId, username }) {
     const { roomId } = useParams();
@@ -42,7 +42,7 @@ function Game({ playerId, username }) {
             if (data.order !== undefined) {
                 setOrder(data.order);
                 setHasOrdered(true);
-                setOrderStatus(prevStatus => ({...prevStatus, [playerId]: true}));
+                setOrderStatus(prevStatus => ({ ...prevStatus, [playerId]: true }));
             }
         };
 
@@ -59,7 +59,7 @@ function Game({ playerId, username }) {
         };
 
         const playerOrderedHandler = (playerId) => {
-            setOrderStatus(prevStatus => ({...prevStatus, [playerId]: true}));
+            setOrderStatus(prevStatus => ({ ...prevStatus, [playerId]: true }));
         };
 
         const roundHistoryHandler = (history) => {

@@ -68,16 +68,14 @@ function Sidebar({ users, playerId, roundHistory }) {
                             </div>
                             <div>
                                 {user.role === 'player' && roundHistory[roundHistory.length - 1] &&
-                                    roundHistory[roundHistory.length - 1].points
-                                        .find(p => p.playerId === user.playerId)?.points
+                                    roundHistory[roundHistory.length - 1].points.find(p => p.playerId === user.playerId)?.points
                                     + " Punkte"
                                 }
                             </div>
                         </div>
                     </div>
                 ))}
-            <div ref={chatContainerRef} className="flex-grow-1 overflow-auto p-3 pb-1 hide-scrollbar"
-                 style={{height: '400px'}}>
+            <div ref={chatContainerRef} className="flex-grow-1 overflow-auto p-3 pb-1 hide-scrollbar" style={{height: '400px'}}>
                 {messages.map((msg, index) => (
                     <div key={index}>
                         {msg.isSystem
@@ -86,7 +84,7 @@ function Sidebar({ users, playerId, roundHistory }) {
                         }
                     </div>
                 ))}
-                <div />
+                <div/>
             </div>
             <div className="input-group p-3 pt-1">
                 <input
