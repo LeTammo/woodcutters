@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { socket } from '../socket';
-import roundHistory from "./RoundHistory";
 
 function Sidebar({ users, playerId, roundHistory }) {
     const [message, setMessage] = useState('');
