@@ -62,9 +62,12 @@ function initialize(io) {
             const user = room.users.find(user => user.playerId === playerId);
             if (user) user.online = true;
             if (user) user.socketId = socket.id;
-            io.to(currentRoomId).emit('receiveMessage',
-                { username: 'Server', message: `${user.username} ist beigetreten`, isSystem: true, color: 'success-emphasis' }
-            );
+            io.to(currentRoomId).emit('receiveMessage', {
+                username: 'Server',
+                message: `${user.username} ist beigetreten`,
+                isSystem: true,
+                color: 'success-emphasis'
+            });
 
             io.to(roomId).emit('updateUsers', room.users);
             io.emit('activeRooms', getActiveRooms());
@@ -114,7 +117,12 @@ function initialize(io) {
             if (!user)
                 return;
 
-            io.to(currentRoomId).emit('receiveMessage', { username: user.username, message, isSystem: false, color: '' });
+            io.to(currentRoomId).emit('receiveMessage', {
+                username: user.username,
+                message,
+                isSystem: false,
+                color: ''
+            });
         });
 
         socket.on('requestGameState', ({ roomId, playerId }) => {
@@ -150,9 +158,12 @@ function initialize(io) {
             const user = rooms[currentRoomId].users.find(user => user.socketId === socket.id);
             if (user) {
                 user.online = false;
-                io.to(currentRoomId).emit('receiveMessage',
-                    { username: 'Server', message: `${user.username} ist gegangen`, isSystem: true, color: 'danger-emphasis' }
-                );
+                io.to(currentRoomId).emit('receiveMessage', {
+                    username: 'Server',
+                    message: `${user.username} ist gegangen`,
+                    isSystem: true,
+                    color: 'danger-emphasis'
+                });
             }
             io.to(currentRoomId).emit('updateUsers', rooms[currentRoomId].users);
         });
@@ -161,9 +172,9 @@ function initialize(io) {
 
 function getActiveRooms() {
     return Object.entries(rooms)
-        .filter(([, room]) => room.users.length > 0 && !room.gameEnded)
-        .map(([roomId, room]) =>
-            ({ roomId, users: room.users, round: room.currentRound, gameStarted: room.gameStarted}));
+                 .filter(([, room]) => room.users.length > 0 && !room.gameEnded)
+                 .map(([roomId, room]) =>
+                     ({ roomId, users: room.users, round: room.currentRound, gameStarted: room.gameStarted }));
 }
 
 function processOrders(io, roomId) {
@@ -221,9 +232,17 @@ function processOrders(io, roomId) {
     io.to(roomId).emit('update', { trees: room.trees, round: room.currentRound });
     io.to(roomId).emit('roundHistory', room.roundHistory);
 
-    db.insertRound(roomId, room.currentRound, JSON.stringify(roundDetails.orders), totalOrdered, totalFelled, roundDetails.remainingTrees, roundDetails.newGrowth, roundDetails.orderSequence.join(', '), (err) => {
-        if (err) console.error(err);
-    });
+    db.insertRound(
+        roomId,
+        room.currentRound,
+        JSON.stringify(roundDetails.orders),
+        totalOrdered,
+        totalFelled,
+        roundDetails.remainingTrees,
+        roundDetails.newGrowth,
+        roundDetails.orderSequence.join(', '),
+        (err) => { if (err) console.error(err); }
+    );
 
     if (room.trees <= 0) {
         room.gameEnded = true;
