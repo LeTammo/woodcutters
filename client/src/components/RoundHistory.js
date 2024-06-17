@@ -4,7 +4,7 @@ function RoundHistory({ roundHistory, users, orderStatus, gameRunning, gameEnded
     return (
         <div className="row justify-content-center">
             {roundHistory.map((round, roundIndex) => (
-                <div key={roundIndex} className="col-6 mb-4">
+                <div key={roundIndex} className="col-6 p-2 mb-4 shadow-lg border border-dark rounded">
                     <h4 className="fw-bold">Runde {round.round}</h4>
                     <div className="mt-2 fst-italic">Bestellungen:</div>
                     <div className="mb-2">
