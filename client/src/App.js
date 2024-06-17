@@ -50,7 +50,7 @@ function App() {
         return (
             <div className="row align-items-center g-lg-5 py-5">
                 <div className="mx-auto col-sm-12 col-md-10 col-lg-6">
-                    <div className="p-4 p-md-5 border rounded-3 bg-body-tertiary bg-opacity-92">
+                    <div className="p-4 p-md-5 border rounded-3 bg-opacity-92">
                         <div className="input-group">
                             <input
                                 type="text"
