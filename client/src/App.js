@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './components/Home';
-import Room from './components/Room';
 import RegisterUser from './components/RegisterUser';
+import Home from './components/Home';
+import Game from './components/Game';
 import './styles/App.css';
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
             <Router>
                 <Routes>
                     <Route path="/" element={<Home playerId={playerId} username={username} />} />
-                    <Route path="/:roomId" element={<Room playerId={playerId} username={username} />} />
+                    <Route path="/:roomId" element={<Game playerId={playerId} username={username} />} />
                 </Routes>
             </Router>
     );

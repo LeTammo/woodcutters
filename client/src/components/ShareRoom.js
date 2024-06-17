@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-function ShareLink() {
+function ShareRoom() {
     const [copied, setCopied] = useState(false);
 
     const handleCopyLink = () => {
@@ -29,4 +29,4 @@ function ShareLink() {
     );
 }
 
-export default ShareLink;
+export default ShareRoom;
