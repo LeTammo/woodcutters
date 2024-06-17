@@ -148,10 +148,12 @@ function initialize(io) {
                 return;
 
             const user = rooms[currentRoomId].users.find(user => user.socketId === socket.id);
-            if (user) user.online = false;
-            io.to(currentRoomId).emit('receiveMessage',
-                { username: 'Server', message: `${user.username} ist gegangen`, isSystem: true, color: 'danger-emphasis' }
-            );
+            if (user) {
+                user.online = false;
+                io.to(currentRoomId).emit('receiveMessage',
+                    { username: 'Server', message: `${user.username} ist gegangen`, isSystem: true, color: 'danger-emphasis' }
+                );
+            }
             io.to(currentRoomId).emit('updateUsers', rooms[currentRoomId].users);
         });
     });
