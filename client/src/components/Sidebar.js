@@ -95,10 +95,10 @@ function Sidebar({ users, playerId, roundHistory }) {
                     value={message}
                     onChange={handleMessageChange}
                     onKeyUp={handleKeyPress}
-                    placeholder="Type your message..."
+                    placeholder="schreibe eine Nachricht..."
                     className="form-control bg-dark border-dark shadow-none"
                 />
-                <button onClick={handleSendMessage} className="btn btn-dark border-dark">Send</button>
+                <button onClick={handleSendMessage} className="btn btn-dark border-dark">Senden</button>
             </div>
         </div>
     );

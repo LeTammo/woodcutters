@@ -47,7 +47,7 @@ function initialize(io) {
             currentRoomId = roomId;
 
             if (!rooms[roomId]) {
-                socket.emit('error', 'Room does not exist');
+                socket.emit('error', 'Der Raum existiert nicht.');
                 return;
             }
 
@@ -63,7 +63,7 @@ function initialize(io) {
             if (user) user.online = true;
             if (user) user.socketId = socket.id;
             io.to(currentRoomId).emit('receiveMessage',
-                { username: 'Server', message: `${user.username} connected`, isSystem: true, color: 'success-emphasis' }
+                { username: 'Server', message: `${user.username} ist beigetreten`, isSystem: true, color: 'success-emphasis' }
             );
 
             io.to(roomId).emit('updateUsers', room.users);
@@ -150,7 +150,7 @@ function initialize(io) {
             const user = rooms[currentRoomId].users.find(user => user.socketId === socket.id);
             if (user) user.online = false;
             io.to(currentRoomId).emit('receiveMessage',
-                { username: 'Server', message: `${user.username} disconnected`, isSystem: true, color: 'danger-emphasis' }
+                { username: 'Server', message: `${user.username} ist gegangen`, isSystem: true, color: 'danger-emphasis' }
             );
             io.to(currentRoomId).emit('updateUsers', rooms[currentRoomId].users);
         });
