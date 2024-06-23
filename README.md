@@ -1,6 +1,8 @@
 
 # Woodcutters
 
+![background.png](client/public/background.png)
+
 ## Einleitung
 
 Woodcutters ist ein simples Planspiel welches im Browser miteinander gespielt werden kann.
