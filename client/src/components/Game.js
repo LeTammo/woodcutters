@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import { socket } from '../socket';
+import { useUser } from "../context/UserContext";
 import ShareRoom from './ShareRoom';
 import PrepareGame from "./PrepareGame";
 import Sidebar from './Sidebar';
@@ -8,7 +9,8 @@ import Rules from "./Rules";
 import GameControls from './GameControls';
 import RoundHistory from './RoundHistory';
 
-function Game({ playerId, username }) {
+function Game() {
+    const { playerId, username } = useUser();
     const { roomId } = useParams();
 
     const [trees, setTrees] = useState(100);

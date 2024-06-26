@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { socket } from '../socket';
+import { useUser } from "../context/UserContext";
 
-function Home({ playerId, username }) {
+function Home() {
+    const { playerId, username } = useUser();
     const [activeRooms, setActiveRooms] = useState([]);
     const navigate = useNavigate();
 

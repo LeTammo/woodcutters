@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
 import { socket } from "../socket";
+import { useUser } from "../context/UserContext";
 
-function RegisterUser({ playerId, setPlayerId, username, setUsername }) {
+function RegisterUser() {
+    const { playerId, setPlayerId, username, setUsername } = useUser();
+
     useEffect(() => {
         const handlePlayerId = (id) => {
             setPlayerId(id);
