@@ -7,9 +7,7 @@ import Game from './components/Game';
 import './styles/App.css';
 
 function App() {
-    const { playerId, username } = useUser();
-
-    const isUserRegistered = playerId && username;
+    const { isUserRegistered } = useUser();
 
     return (
         <Router>

@@ -8,8 +8,10 @@ export const UserProvider = ({ children }) => {
     const [playerId, setPlayerId] = useState(localStorage.getItem('playerId'));
     const [username, setUsername] = useState(localStorage.getItem('username'));
 
+    const isUserRegistered = playerId && username;
+
     return (
-        <UserContext.Provider value={{ playerId, setPlayerId, username, setUsername }}>
+        <UserContext.Provider value={{ playerId, setPlayerId, username, setUsername, isUserRegistered }}>
             {children}
         </UserContext.Provider>
     );
