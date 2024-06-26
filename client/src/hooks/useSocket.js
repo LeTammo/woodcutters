@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from "react";
-import { socket } from "../socket";
+import { useEffect, useState, useCallback } from 'react';
+import { socket } from '../socket';
 
 function useSocket() {
     const [activeRooms, setActiveRooms] = useState([]);
