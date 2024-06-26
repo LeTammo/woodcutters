@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { socket } from '../socket';
-import { useUser } from "../context/UserContext";
+import { useUser } from '../context/UserContext';
 import ShareRoom from './ShareRoom';
-import PrepareGame from "./PrepareGame";
+import PrepareGame from './PrepareGame';
 import Sidebar from './Sidebar';
-import Rules from "./Rules";
+import Rules from './Rules';
 import GameControls from './GameControls';
 import RoundHistory from './RoundHistory';
 
@@ -127,9 +127,9 @@ function Game() {
             <div className="row p-4 p-md-5 border rounded-3 bg-body-tertiary bg-opacity-92">
                 <div className="col-12 col-sm-6 col-md-8">
                     {!gameStarted ? (<>
-                        <ShareRoom/>
-                        <PrepareGame isReady={isReady} handleReady={handleReady}/>
-                        <Rules/>
+                        <ShareRoom />
+                        <PrepareGame isReady={isReady} handleReady={handleReady} />
+                        <Rules />
                     </>) : (<>
                         <RoundHistory
                             roundHistory={roundHistory}
@@ -158,7 +158,7 @@ function Game() {
                 </div>
                 <div className="col-12 col-sm-6 col-md-4">
                     <div className="mt-3">
-                        <Sidebar users={connectedUsers} playerId={playerId} roundHistory={roundHistory}/>
+                        <Sidebar users={connectedUsers} playerId={playerId} roundHistory={roundHistory} />
                     </div>
                 </div>
             </div>
