@@ -13,7 +13,7 @@ function App() {
         <Router>
             <Routes>
                 <Route path="/" element={isUserRegistered ? <Home /> : <RegisterUser />} />
-                <Route path="/:roomId" element={isUserRegistered ? <Game /> : <Navigate to="/" />} />
+                <Route path="/:roomId" element={isUserRegistered ? <Game /> : <RegisterUser />} />
             </Routes>
         </Router>
     );
