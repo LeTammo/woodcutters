@@ -9,17 +9,15 @@ import './styles/App.css';
 function App() {
     const { playerId, username } = useUser();
 
+    const isUserRegistered = playerId && username;
+
     return (
-        !username || !playerId
-            ?
-            <RegisterUser />
-            :
-            <Router>
-                <Routes>
-                    <Route path="/" element={<Home />}/>
-                    <Route path="/:roomId" element={<Game />}/>
-                </Routes>
-            </Router>
+        <Router>
+            <Routes>
+                <Route path="/" element={isUserRegistered ? <Home /> : <RegisterUser />} />
+                <Route path="/:roomId" element={isUserRegistered ? <Game /> : <Navigate to="/" />} />
+            </Routes>
+        </Router>
     );
 }
 
