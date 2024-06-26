@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, Navigate } from 'react-router-dom';
 import { socket } from '../socket';
 import { useUser } from "../context/UserContext";
 import ShareRoom from './ShareRoom';
@@ -13,6 +13,7 @@ function Game() {
     const { playerId, username } = useUser();
     const { roomId } = useParams();
 
+    const [roomExists, setRoomExists] = useState(true);
     const [trees, setTrees] = useState(100);
     const [order, setOrder] = useState(0);
     const [message, setMessage] = useState('');
@@ -26,6 +27,12 @@ function Game() {
     const [role, setRole] = useState('player');
 
     useEffect(() => {
+        socket.emit('checkRoom', roomId, (exists) => {
+            setRoomExists(exists);
+        });
+
+        if (!roomExists) return;
+
         socket.emit('joinRoom', { roomId, username, playerId });
         socket.emit('requestGameState', { roomId, playerId });
 
@@ -96,7 +103,11 @@ function Game() {
             socket.off('gameStarted', gameStartedHandler);
             socket.off('end', endHandler);
         };
-    }, [roomId, playerId, username]);
+    }, [roomId, playerId, username, roomExists]);
+
+    if (!roomExists) {
+        return <Navigate to="/" />;
+    }
 
     const placeOrder = () => {
         if (!gameEnded && role === 'player') {

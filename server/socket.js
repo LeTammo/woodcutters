@@ -13,6 +13,11 @@ function initialize(io) {
     io.on('connection', (socket) => {
         let currentRoomId = null;
 
+        socket.on('checkRoom', (roomId, callback) => {
+            const roomExists = rooms[roomId] !== undefined;
+            callback(roomExists);
+        });
+
         socket.on('requestPlayerId', () => {
             const playerId = nanoid();
             socket.emit('playerId', playerId);
