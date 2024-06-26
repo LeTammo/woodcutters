@@ -98,6 +98,21 @@ function initialize(io) {
             }
         });
 
+        socket.on('isReady', (playerId) => {
+            if (!currentRoomId || !rooms[currentRoomId])
+                return;
+
+            const room = rooms[currentRoomId];
+
+            const user = room.users.find(user => user.playerId === playerId);
+            if (!user)
+                return;
+
+            if (user.ready) {
+                socket.emit('isReady');
+            }
+        });
+
         socket.on('order', ({ numTrees, playerId }) => {
             if (!currentRoomId || !rooms[currentRoomId] || rooms[currentRoomId].gameEnded)
                 return;

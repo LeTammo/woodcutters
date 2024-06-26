@@ -30,6 +30,7 @@ function useGameSocket() {
 
         socket.emit('joinRoom', { roomId, username, playerId });
         socket.emit('requestGameState', { roomId, playerId });
+        socket.emit('isReady', playerId);
 
         const updateHandler = (data) => {
             setTrees(data.trees);
@@ -79,6 +80,10 @@ function useGameSocket() {
             setMessage(msg);
         };
 
+        function setIsReadyHandler() {
+            setIsReady(true);
+        }
+
         socket.on('update', updateHandler);
         socket.on('gameState', gameStateHandler);
         socket.on('result', resultHandler);
@@ -87,6 +92,7 @@ function useGameSocket() {
         socket.on('roundHistory', roundHistoryHandler);
         socket.on('gameStarted', gameStartedHandler);
         socket.on('end', endHandler);
+        socket.on('isReady', setIsReadyHandler);
 
         return () => {
             socket.off('update', updateHandler);
@@ -97,6 +103,7 @@ function useGameSocket() {
             socket.off('roundHistory', roundHistoryHandler);
             socket.off('gameStarted', gameStartedHandler);
             socket.off('end', endHandler);
+            socket.off('isReady', setIsReadyHandler);
         };
     }, [roomId, playerId, username, roomExists]);
 
