@@ -1,41 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { socket } from '../socket';
-import { useUser } from "../context/UserContext";
-import ActiveRooms from "./ActiveRooms";
+import { useUser } from '../context/UserContext';
+import ActiveRooms from './ActiveRooms';
+import useSocket from '../hooks/useSocket';
 
 function Home() {
     const { playerId, username } = useUser();
-    const [activeRooms, setActiveRooms] = useState([]);
+    const { activeRooms, roomId, getActiveRooms, createRoom } = useSocket();
     const navigate = useNavigate();
 
     useEffect(() => {
-        socket.emit('getActiveRooms');
+        getActiveRooms();
+    }, [getActiveRooms]);
 
-        const handleActiveRooms = rooms => {
-            if (Array.isArray(rooms)) {
-                setActiveRooms(rooms);
-            } else {
-                console.error('Received data is not an array', rooms);
-            }
-        };
-
-        const handleRoomCreated = (roomId) => {
+    useEffect(() => {
+        if (roomId) {
             navigate(`/${roomId}`);
-        };
-
-        socket.on('activeRooms', handleActiveRooms);
-        socket.on('roomCreated', handleRoomCreated);
-
-        return () => {
-            socket.off('activeRooms', handleActiveRooms);
-            socket.off('roomCreated', handleRoomCreated);
         }
-    }, [navigate]);
+    }, [roomId, navigate]);
 
-    const createRoom = () => {
-        socket.emit('createRoom', playerId, username);
-    };
+    const handleCreateRoom = () => {
+        createRoom(playerId, username);
+    }
 
     return (
         <div className="row align-items-center g-lg-5 py-5">
@@ -43,7 +29,7 @@ function Home() {
                 <div className="p-4 p-md-5 border rounded-3 bg-body-tertiary bg-opacity-92">
                     <h5 className="text-center mb-5">Hallo {username}!</h5>
                     <div>
-                        <button className="btn btn-success" onClick={createRoom}>Raum erstellen</button>
+                        <button className="btn btn-success" onClick={handleCreateRoom}>Raum erstellen</button>
                     </div>
                     {activeRooms.length > 0 && <ActiveRooms rooms={activeRooms} />}
                 </div>
