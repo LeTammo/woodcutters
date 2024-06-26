@@ -1,11 +1,12 @@
-import React from "react";
+import React from 'react';
 
 function PrepareGame({ isReady, handleReady }) {
     return (
-        <button className={`btn ${isReady ? 'btn-secondary' : 'btn-success'} mt-3`}
-                onClick={handleReady} disabled={isReady}>
-            {isReady ? 'Bereit' : 'Bereit'}
-        </button>
+        isReady ? (
+            <div className="mt-3">Wartet, bis alle Spieler bereit sind...</div>
+        ) : (
+            <button className="btn btn-success mt-3" onClick={handleReady} disabled={isReady}>Bereit</button>
+        )
     )
 }
 
