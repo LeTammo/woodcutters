@@ -12,24 +12,29 @@ function Home() {
     useEffect(() => {
         socket.emit('getActiveRooms');
 
-        socket.on('activeRooms', rooms => {
+        const handleActiveRooms = rooms => {
             if (Array.isArray(rooms)) {
                 setActiveRooms(rooms);
             } else {
                 console.error('Received data is not an array', rooms);
             }
-        });
+        };
+
+        const handleRoomCreated = (roomId) => {
+            navigate(`/${roomId}`);
+        };
+
+        socket.on('activeRooms', handleActiveRooms);
+        socket.on('roomCreated', handleRoomCreated);
 
         return () => {
-            socket.off('activeRooms');
+            socket.off('activeRooms', handleActiveRooms);
+            socket.off('roomCreated', handleRoomCreated);
         }
-    }, []);
+    }, [navigate]);
 
     const createRoom = () => {
         socket.emit('createRoom', playerId, username);
-        socket.on('roomCreated', (roomId) => {
-            navigate(`/${roomId}`);
-        });
     };
 
     return (
