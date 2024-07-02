@@ -12,10 +12,6 @@ router.use((req, res, next) => {
     next();
 });
 
-//router.get('/:sessionId', (req, res) => {
-//    const sessionId = req.params.sessionId;
-//});
-
 router.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
 });
