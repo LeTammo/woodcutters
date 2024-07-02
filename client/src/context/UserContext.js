@@ -17,15 +17,15 @@ export const UserProvider = ({ children }) => {
             localStorage.setItem('playerId', id);
         };
 
-        if (!playerId) {
-            socket.emit('requestPlayerId');
+        if (username && !playerId) {
+            socket.emit('requestPlayerId', { username });
             socket.on('playerId', handlePlayerId);
         }
 
         return () => {
             socket.off('playerId', handlePlayerId);
         };
-    }, [playerId, setPlayerId]);
+    }, [playerId, username]);
 
     useEffect(() => {
         if (playerId && username) {

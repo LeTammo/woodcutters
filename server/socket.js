@@ -18,7 +18,8 @@ function initialize(io) {
             callback(roomExists);
         });
 
-        socket.on('requestPlayerId', () => {
+        socket.on('requestPlayerId', ({ username }) => {
+            console.log('Requesting player ID for', username);
             const playerId = nanoid();
             socket.emit('playerId', playerId);
         });
