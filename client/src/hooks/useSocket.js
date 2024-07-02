@@ -27,9 +27,9 @@ function useSocket() {
         };
     }, []);
 
-    const getActiveRooms = () => {
+    const getActiveRooms = useCallback(() => {
         socket.emit('getActiveRooms');
-    };
+    }, [socket]);
 
     const createRoom = useCallback((playerId, username) => {
         socket.emit('createRoom', playerId, username);
@@ -37,8 +37,9 @@ function useSocket() {
 
     return {
         activeRooms,
-        roomId,
+        setActiveRooms,
         getActiveRooms,
+        roomId,
         createRoom
     };
 }

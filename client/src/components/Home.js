@@ -3,14 +3,25 @@ import { useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 import ActiveRooms from './ActiveRooms';
 import useSocket from '../hooks/useSocket';
+import { socket } from "../socket";
 
 function Home() {
     const { playerId, username } = useUser();
-    const { activeRooms, roomId, getActiveRooms, createRoom } = useSocket();
+    const { activeRooms, setActiveRooms, getActiveRooms, roomId, createRoom } = useSocket();
     const navigate = useNavigate();
 
     useEffect(() => {
         getActiveRooms();
+        console.log('getActiveRooms')
+        const handleActiveRooms = (rooms) => {
+            setActiveRooms(rooms);
+        };
+
+        socket.on('activeRooms', handleActiveRooms);
+
+        return () => {
+            socket.off('activeRooms', handleActiveRooms);
+        };
     }, [getActiveRooms]);
 
     useEffect(() => {

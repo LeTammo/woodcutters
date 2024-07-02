@@ -37,7 +37,8 @@ function initialize(io) {
                 orders: [],
                 roundHistory: [],
                 gameStarted: false,
-                gameEnded: false
+                gameEnded: false,
+                lastActive: Date.now()
             };
 
             currentRoomId = roomId;
@@ -76,6 +77,8 @@ function initialize(io) {
 
             io.to(roomId).emit('updateUsers', room.users);
             io.emit('activeRooms', getActiveRooms());
+
+            updateRoomActivity(roomId);
         });
 
         socket.on('setReady', (playerId) => {
@@ -96,6 +99,8 @@ function initialize(io) {
                 io.to(currentRoomId).emit('gameStarted');
                 io.emit('activeRooms', getActiveRooms());
             }
+
+            updateRoomActivity(currentRoomId);
         });
 
         socket.on('isReady', (playerId) => {
@@ -111,6 +116,8 @@ function initialize(io) {
             if (user.ready) {
                 socket.emit('isReady');
             }
+
+            updateRoomActivity(currentRoomId);
         });
 
         socket.on('order', ({ numTrees, playerId }) => {
@@ -130,6 +137,8 @@ function initialize(io) {
                 processOrders(io, currentRoomId);
                 io.emit('activeRooms', getActiveRooms());
             }
+
+            updateRoomActivity(currentRoomId);
         });
 
         socket.on('sendMessage', ({ playerId, message }) => {
@@ -143,6 +152,8 @@ function initialize(io) {
                 isSystem: false,
                 color: ''
             });
+
+            updateRoomActivity(currentRoomId);
         });
 
         socket.on('requestGameState', ({ roomId, playerId }) => {
@@ -185,16 +196,51 @@ function initialize(io) {
                     color: 'danger-emphasis'
                 });
             }
+
             io.to(currentRoomId).emit('updateUsers', rooms[currentRoomId].users);
+
+            io.emit('activeRooms', getActiveRooms());
+
+            updateRoomActivity(currentRoomId);
         });
     });
 }
 
 function getActiveRooms() {
-    return Object.entries(rooms)
-                 .filter(([, room]) => room.users.length > 0 && !room.gameEnded)
-                 .map(([roomId, room]) =>
-                     ({ roomId, users: room.users, round: room.currentRound, gameStarted: room.gameStarted }));
+    const inactiveThreshold = Date.now() - 300000;
+    const deleteThreshold   = Date.now() - 900000;
+
+    let roomHasPlayers, roomIsInactive, roomIsRemovable;
+    let activeRooms = [];
+
+    Array.from(Object.keys(rooms)).forEach((roomId) => {
+        const room = rooms[roomId];
+        roomHasPlayers = room.users.some(user => user.online);
+        roomIsInactive = room.lastActive < inactiveThreshold;
+        roomIsRemovable = room.lastActive < deleteThreshold;
+
+        if (roomIsRemovable && !roomHasPlayers) {
+            console.log(`Deleting room ${roomId}`)
+            delete rooms[roomId];
+        } else if (!roomIsInactive || roomHasPlayers) {
+            activeRooms.push({
+                roomId: roomId,
+                users: room.users,
+                round: room.currentRound,
+                gameStarted: room.gameStarted
+            });
+        }
+    });
+
+    return activeRooms;
+}
+
+function updateRoomActivity(roomId) {
+    try {
+        rooms[roomId].lastActive = Date.now();
+    } catch (e) {
+        console.error("UpdateRoomActivity: ", e.message);
+    }
 }
 
 function processOrders(io, roomId) {
