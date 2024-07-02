@@ -1,31 +1,8 @@
-import React, { useEffect } from "react";
-import { socket } from "../socket";
+import React from "react";
 import { useUser } from "../context/UserContext";
 
 function RegisterUser() {
-    const { playerId, setPlayerId, username, setUsername } = useUser();
-
-    useEffect(() => {
-        const handlePlayerId = (id) => {
-            setPlayerId(id);
-            localStorage.setItem('playerId', id);
-        };
-
-        if (!playerId) {
-            socket.emit('requestPlayerId');
-            socket.on('playerId', handlePlayerId);
-        }
-
-        return () => {
-            socket.off('playerId', handlePlayerId);
-        };
-    }, [playerId]);
-
-    useEffect(() => {
-        if (playerId && username) {
-            socket.emit('registerUser', { playerId, username });
-        }
-    }, [playerId, username]);
+    const { setUsername } = useUser();
 
     const handleSetUsername = () => {
         const input = document.querySelector('input');
@@ -60,7 +37,7 @@ function RegisterUser() {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default RegisterUser;

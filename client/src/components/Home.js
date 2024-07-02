@@ -12,7 +12,6 @@ function Home() {
 
     useEffect(() => {
         getActiveRooms();
-        console.log('getActiveRooms')
         const handleActiveRooms = (rooms) => {
             setActiveRooms(rooms);
         };

@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { socket } from "../socket";
 
 const UserContext = createContext();
 
@@ -9,6 +10,28 @@ export const UserProvider = ({ children }) => {
     const [username, setUsername] = useState(localStorage.getItem('username'));
 
     const isUserRegistered = playerId && username;
+
+    useEffect(() => {
+        const handlePlayerId = (id) => {
+            setPlayerId(id);
+            localStorage.setItem('playerId', id);
+        };
+
+        if (!playerId) {
+            socket.emit('requestPlayerId');
+            socket.on('playerId', handlePlayerId);
+        }
+
+        return () => {
+            socket.off('playerId', handlePlayerId);
+        };
+    }, [playerId, setPlayerId]);
+
+    useEffect(() => {
+        if (playerId && username) {
+            socket.emit('registerUser', { playerId, username });
+        }
+    }, [playerId, username]);
 
     return (
         <UserContext.Provider value={{ playerId, setPlayerId, username, setUsername, isUserRegistered }}>
