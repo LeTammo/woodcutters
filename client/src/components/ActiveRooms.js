@@ -6,7 +6,7 @@ function ActiveRooms({ rooms }) {
 
     return (
         <div className="mt-5">
-            <h5>Aktive Lobbies</h5>
+            <h5>Aktive Räume</h5>
             {rooms.map(room => (
                 <div key={room.roomId} className="row p-2 px-0 mb-1 text-start bg-dark border rounded">
                     <div className="col-4 m-auto text-start">
