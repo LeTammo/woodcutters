@@ -211,17 +211,15 @@ function getActiveRooms() {
     const inactiveThreshold = Date.now() - 300000;
     const deleteThreshold   = Date.now() - 900000;
 
-    let roomHasPlayers, roomIsInactive, roomIsRemovable;
     let activeRooms = [];
 
-    Array.from(Object.keys(rooms)).forEach((roomId) => {
-        const room = rooms[roomId];
-        roomHasPlayers = room.users.some(user => user.online);
-        roomIsInactive = room.lastActive < inactiveThreshold;
-        roomIsRemovable = room.lastActive < deleteThreshold;
+    for (const [roomId, room] of Object.entries(rooms)) {
+        let roomHasPlayers = room.users.some(user => user.online);
+        let roomIsInactive = room.lastActive < inactiveThreshold;
+        let roomIsRemovable = room.lastActive < deleteThreshold;
 
         if (roomIsRemovable && !roomHasPlayers) {
-            console.log(`Deleting room ${roomId}`)
+            console.log(`Deleting room ${roomId}`);
             delete rooms[roomId];
         } else if (!roomIsInactive || roomHasPlayers) {
             activeRooms.push({
@@ -232,7 +230,7 @@ function getActiveRooms() {
                 gameEnded: room.gameEnded
             });
         }
-    });
+    }
 
     return activeRooms;
 }
