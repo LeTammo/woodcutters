@@ -227,7 +227,8 @@ function getActiveRooms() {
                 roomId: roomId,
                 users: room.users,
                 round: room.currentRound,
-                gameStarted: room.gameStarted
+                gameStarted: room.gameStarted,
+                gameEnded: room.gameEnded
             });
         }
     });

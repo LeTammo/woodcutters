@@ -10,7 +10,7 @@ function ActiveRooms({ rooms }) {
             {rooms.map(room => (
                 <div key={room.roomId} className="row p-2 px-0 mb-1 text-start bg-dark border rounded">
                     <div className="col-4 m-auto text-start">
-                        {!room.gameStarted ? 'Warten in Lobby' : `Runde ${room.round + 1}`}
+                        {!room.gameStarted ? 'Warten in Lobby' : room.gameEnded ? 'Spiel beendet' : `Runde ${room.round + 1}`}
                     </div>
                     <div className="col-4 m-auto">
                         {room.users.map((user) => (
