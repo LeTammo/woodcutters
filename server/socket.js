@@ -294,10 +294,6 @@ function processOrders(io, roomId) {
     roundDetails.newGrowth = room.trees - roundDetails.remainingTrees;
     room.roundHistory.push(roundDetails);
 
-    room.orders = [];
-    io.to(roomId).emit('update', { trees: room.trees, round: room.currentRound });
-    io.to(roomId).emit('roundHistory', room.roundHistory);
-
     db.insertRound(
         roomId,
         room.currentRound,
@@ -320,6 +316,10 @@ function processOrders(io, roomId) {
         room.gameEnded = true;
         io.to(roomId).emit('end', 'Alle Runden wurden gespielt. Das Spiel ist beendet.');
     }
+
+    room.orders = [];
+    io.to(roomId).emit('update', { trees: room.trees, round: room.currentRound });
+    io.to(roomId).emit('roundHistory', room.roundHistory);
 }
 
 function growTrees(room) {
