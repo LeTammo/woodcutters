@@ -14,11 +14,26 @@
     />
     <title>Woodcutters - App is Updating</title>
 </head>
-<body id="main-background" class="text-center">
-<div class="container px-4 py-5">
-    <a class="h2 p-3 text-decoration-none" href="/">Woodcutters</a>
-    <p class="pt-5 text-warning">App is currently updating</p>
-    <p>Please check back in a few seconds.</p>
+<body id="main-background" class="bg-dark text-center">
+<div class="header-container">
+    <a class="github-link" href="https://github.com/LeTammo/woodcutters" target="_blank">
+        <img src="/images/github-mark-white.svg" alt="GitHub" width="30" height="30" class="light">
+        <img src="/images/github-mark.svg" alt="GitHub" width="30" height="30" class="dark">
+    </a>
 </div>
+<div class="container px-4 py-5">
+    <a class="h2 p-3 text-decoration-none text-white" href="/">Woodcutters</a>
+    <p class="pt-5 text-warning">App is currently updating</p>
+    <p class="text-white">Please check back in a few seconds.</p>
+</div>
+
+<script src="styles/popper.min.js"></script>
+<script src="styles/bootstrap.min.js"></script>
+<script>
+    let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
+    })
+</script>
 </body>
 </html>

@@ -4,6 +4,42 @@
     min-height: 100vh;
     background-size: 100% auto;
 }
+
+.header-container {
+    position: relative;
+}
+
+.github-link {
+    position: absolute;
+    top: 50px;
+    right: 50px;
+}
+.github-link img {
+    transition: opacity 0.3s ease;
+}
+.github-link img.dark {
+    display: none;
+}
+.github-link:hover {
+    background-color: white;
+    border: 3px solid white;
+    border-radius: 17px;
+    top: 49px;
+    right: 49px;
+}
+.github-link:hover img.light {
+    display: none;
+}
+.github-link:hover img.dark {
+    display: inline;
+}
+.github-link {
+    position: fixed;
+    bottom: 20px;
+    top: initial;
+    right: initial;
+}
+
 @media (max-width: 1600px) {
     body {
         background-size: 120%!important;
