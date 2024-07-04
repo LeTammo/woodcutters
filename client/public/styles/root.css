@@ -33,12 +33,6 @@
 .github-link:hover img.dark {
     display: inline;
 }
-.github-link {
-    position: fixed;
-    bottom: 20px;
-    top: initial;
-    right: initial;
-}
 
 @media (max-width: 1600px) {
     body {
@@ -67,6 +61,18 @@
 @media (max-width: 768px) {
     body {
         background-size: 260%!important;
+    }
+    .github-link {
+        position: fixed;
+        bottom: 20px;
+        top: initial;
+        right: initial;
+    }
+    .github-link:hover {
+        position: fixed;
+        bottom: 18px;
+        top: initial;
+        right: initial;
     }
 }
 
