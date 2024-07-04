@@ -1,6 +1,6 @@
 # Woodcutters
 
-![background.png](client/public/background.png)
+![background.png](client/public/images/background.png)
 
 ## Einleitung
 

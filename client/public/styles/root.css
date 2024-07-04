@@ -1,42 +1,41 @@
 #main-background {
     background: linear-gradient(rgba(33, 37, 41, 0.5), rgba(33, 37, 41, 0.5)),
-    url("./background.png") bottom center no-repeat;
+    url("../images/background.png") bottom center no-repeat;
     min-height: 100vh;
     background-size: 100% auto;
 }
-
 @media (max-width: 1600px) {
     body {
-        background-size: 120%;
+        background-size: 120%!important;
     }
 }
 
 @media (max-width: 1400px) {
     body {
-        background-size: 140%;
+        background-size: 140%!important;
     }
 }
 
 @media (max-width: 1200px) {
     body {
-        background-size: 160%;
+        background-size: 160%!important;
     }
 }
 
 @media (max-width: 992px) {
     body {
-        background-size: 200%;
+        background-size: 200%!important;
     }
 }
 
 @media (max-width: 768px) {
     body {
-        background-size: 260%;
+        background-size: 260%!important;
     }
 }
 
 @media (max-width: 576px) {
     body {
-        background-size: 320%;
+        background-size: 320%!important;
     }
 }
